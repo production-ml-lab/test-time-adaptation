@@ -2,13 +2,13 @@
 
 ## Installation
 
-1. Install poetry.
+1. Install uv.
     ```bash
-    pip install poetry
+    pip install uv
     ```
-2. Install poetry packages.
+2. Install uv packages.
     ```bash
-    poetry install
+    uv install
     ```
 3. Run test code.
     ```bash

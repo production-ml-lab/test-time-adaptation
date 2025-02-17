@@ -1,10 +1,11 @@
 import logging
 
-import method
-from config.utils import parse_args, load_config
-from misc.registry import ADAPTATION_REGISTRY
+import tta.method
+from tta.config.utils import parse_args, load_config
+from tta.misc.registry import ADAPTATION_REGISTRY
 
 logger = logging.getLogger(__name__)
+
 
 def evaluate():
     # Load configs
@@ -15,9 +16,9 @@ def evaluate():
     # Load TTA method
     model = adaptations.get(config.MODEL.ADAPTATION)(config=config)
     logger.info(model)
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     adaptations = ADAPTATION_REGISTRY
     logger.info(adaptations)
 
