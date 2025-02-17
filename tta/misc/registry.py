@@ -92,4 +92,4 @@ class Registry(Iterable[Tuple[str, Any]]):
     __str__ = __repr__
 
 
-ADAPTATION_REGISTRY =  Registry("ADAPTATION")
+ADAPTATION_REGISTRY = Registry("ADAPTATION")
