@@ -26,3 +26,10 @@
     ```bash
     python tests/installation_check.py
     ```
+
+## Run TTA
+
+1. Source test example      
+    ```bash
+    python run_tta.py --config tta/config/cifar10c/source.yaml 
+    ```
