@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torchvision
@@ -16,13 +17,12 @@ logger = logging.getLogger(__name__)
 
 class BaseMethod(ABC):
     def __init__(self, config) -> None:
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.config = config
         self.model = self.get_model()
         self.params, param_names = self.collect_params()
         self.optimizer = self.set_optimizer()
         self.loss = self.set_loss()
-
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
     
 
     @abstractmethod
@@ -65,7 +65,10 @@ class BaseMethod(ABC):
 
             if model_pretrain is not None:
                 # Load pretrained model
-                pass
+                state_dict = torch.load(
+                    os.path.abspath('tta/asset/resnet26_cifar10.pth'), 
+                    map_location=self.device)
+                model.load_state_dict(state_dict=state_dict, strict=True)
 
             return model
 
