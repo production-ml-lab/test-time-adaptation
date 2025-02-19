@@ -20,19 +20,24 @@ BATCH_SIZE = 128
 EPOCHS = 50
 LEARNING_RATE = 0.001
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-MODEL_SAVE_PATH = "resnet_cifar10.pth"
+MODEL_SAVE_PATH = "resnet26_cifar10.pth"
 
 # CIFAR-10 데이터셋 변환 (Normalization 적용)
-transform = transforms.Compose([
+train_transform = transforms.Compose([
     transforms.RandomHorizontalFlip(),  # 데이터 증강 (좌우 반전)
     transforms.RandomCrop(32, padding=4),  # 데이터 증강 (랜덤 크롭)
     transforms.ToTensor(),
     transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),  # CIFAR-10 정규화
 ])
 
+test_transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),  # CIFAR-10 정규화
+])
+
 # 데이터 로드
-train_dataset = CIFAR10(root="test-time-adaptation/data", train=True, transform=transform, download=True)
-test_dataset = CIFAR10(root="test-time-adaptation/data", train=False, transform=transform, download=True)
+train_dataset = CIFAR10(root="test-time-adaptation/data", train=True, transform=train_transform, download=True)
+test_dataset = CIFAR10(root="test-time-adaptation/data", train=False, transform=test_transform, download=True)
 
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
