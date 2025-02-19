@@ -1,3 +1,4 @@
+import os
 import argparse
 
 from ..config import cifar10c
@@ -16,7 +17,7 @@ def parse_args():
 
 def load_config(cfg_path, opts):
     # 기본 설정을 클론하여 사용
-
+    cfg_path = os.path.abspath(cfg_path)
     benchmark = cfg_path.split('/')[-2]
     if benchmark == 'cifar10c':
         config = cifar10c
