@@ -1,11 +1,14 @@
 MODEL:
   ADAPTATION: Source
-  ARCH: ResNet18
-DATA:
-  NAME: cifar10-c
+  NAME: resnet26
+  BACKEND: custom
 SHIFT:
   SEVERITY:
     - 5
+    - 4
+    - 3
+    - 2
+    - 1
   TYPE:
     - gaussian_noise
     - shot_noise

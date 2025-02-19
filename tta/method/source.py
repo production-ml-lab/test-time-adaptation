@@ -1,26 +1,27 @@
-from method import BaseMethod
-from misc.registry import ADAPTATION_REGISTRY
+import torch
+
+from tta.method import BaseMethod
+from tta.misc.registry import ADAPTATION_REGISTRY
 
 
 @ADAPTATION_REGISTRY.register()
 class Source(BaseMethod):
-    def __init__(self, config):
-        super().__init__(config=config)
 
     def collect_params(self):
-        return super().collect_params()
-
-    def set_optimizer(self):
-        return super().set_optimizer()
+        # No params to update
+        params = []
+        names = []
+        return params, names
 
     def set_loss(self):
         return super().set_loss()
 
     def forward_and_adapt(self, x):
         return super().forward_and_adapt(x)
-
+    
+    @torch.no_grad()
     def predict(self, x):
-        return super().predict(x)
+        return self.model(x.to(self.device)).argmax(1)
+        
 
-    def reset(self):
-        return super().reset()
+

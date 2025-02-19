@@ -93,3 +93,4 @@ class Registry(Iterable[Tuple[str, Any]]):
 
 
 ADAPTATION_REGISTRY = Registry("ADAPTATION")
+DATASET_REGISTRY = Registry("DATASET")

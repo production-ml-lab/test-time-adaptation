@@ -4,29 +4,15 @@ from typing import List
 import torch
 import numpy as np
 from torch.utils.data import Dataset
-from robustbench.data import load_cifar10c
+from robustbench.data import load_cifar10, load_cifar10c
+from tta.misc.registry import DATASET_REGISTRY
+from tta.config import cifar10c
 
-CORRUPTION_DOMAINS = [
-    "shot_noise",
-    "motion_blur",
-    "snow",
-    "pixelate",
-    "gaussian_noise",
-    "defocus_blur",
-    "brightness",
-    "fog",
-    "zoom_blur",
-    "frost",
-    "glass_blur",
-    "impulse_noise",
-    "contrast",
-    "jpeg_compression",
-    "elastic_transform",
-]
+CORRUPTION_DOMAINS = cifar10c.SHIFT.TYPE
 
-DEFAULT_DATA_DIR = Path(__file__).parent.parent.parent.parent / "data"
+DEFAULT_DATA_DIR = Path(__file__).parent.parent.parent.parent / "dataset"
 
-
+@DATASET_REGISTRY.register()
 class CifarDataset(Dataset):
     def __init__(
         self,

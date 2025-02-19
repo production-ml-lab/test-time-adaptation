@@ -1,6 +1,6 @@
-from method.base import BaseMethod
-from method.source import Source
-from method.tent import Tent
+from .base import BaseMethod
+from .source import Source
+from .tent import Tent
 
 
 __all__ = [
