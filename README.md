@@ -4,7 +4,11 @@
 
 1. Install uv.
     ```bash
+    # method 1.
     pip install uv
+
+    # method 2.
+    curl -LsSf https://astral.sh/uv/install.sh | sh
     ```
 2. Make virtualenv (Recommend: make it in project root directory)
     ```bash
