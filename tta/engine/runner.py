@@ -40,6 +40,8 @@ class Runner():
 
                 acc, err = self.get_accuracy(preds, gts)
                 self.results[f'{shift_name}_{severity_level}'] = math.floor(err * 1000) / 1000
+
+                self.method.reset()
         
         return self.results
 
