@@ -49,7 +49,7 @@ def laplacian_optimization(unary, kernel, bound_lambda=1, max_steps=100):
         E_list.append(E)
 
         if i > 1 and (abs(E - oldE) <= 1e-8 * abs(oldE)):
-            print(f"Converged in {i} iterations")
+            # print(f"Converged in {i} iterations")
             break
         else:
             oldE = E
