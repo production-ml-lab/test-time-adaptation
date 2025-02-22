@@ -35,18 +35,14 @@ train_transform = transforms.Compose(
         transforms.RandomHorizontalFlip(),  # 데이터 증강 (좌우 반전)
         transforms.RandomCrop(32, padding=4),  # 데이터 증강 (랜덤 크롭)
         transforms.ToTensor(),
-        transforms.Normalize(
-            mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)
-        ),  # CIFAR-10 정규화
+        transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),  # CIFAR-10 정규화
     ]
 )
 
 test_transform = transforms.Compose(
     [
         transforms.ToTensor(),
-        transforms.Normalize(
-            mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)
-        ),  # CIFAR-10 정규화
+        transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),  # CIFAR-10 정규화
     ]
 )
 

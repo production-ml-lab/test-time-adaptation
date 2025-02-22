@@ -39,3 +39,18 @@
 ## For Developer
 
 Install pre-commit.
+
+```bash
+uv pip install pre-commit
+```
+
+Install the git hook scripts.
+
+```bash
+pre-commit install
+```
+
+Run pre-commit files
+```bash
+pre-commit run --all-files
+```
