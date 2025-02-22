@@ -76,7 +76,7 @@ class BaseMethod(ABC):
                 )
                 model.load_state_dict(state_dict=state_dict, strict=True)
 
-            return model
+            return model.to(self.device)
 
         elif model_backend == "torchvision":
             available_models = torchvision.models.list_models(module=torchvision.models)

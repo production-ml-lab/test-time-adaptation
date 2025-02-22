@@ -1,5 +1,5 @@
 MODEL:
-    ADAPTATION: Tent
+    ADAPTATION: LAME
     NAME: resnet26
     BACKEND: custom
 DATA:
