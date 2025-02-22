@@ -2,11 +2,12 @@ import logging
 
 from tta.engine.runner import Runner
 from tta.misc.registry import ADAPTATION_REGISTRY
-from tta.config.utils import parse_args, load_config
+from tta.utils.config.tools import parse_args, load_config
 
 logger = logging.getLogger(__name__)
 
 adapt_registry = ADAPTATION_REGISTRY
+
 
 def evaluate():
     # Load configs
@@ -15,7 +16,7 @@ def evaluate():
     logger.info(f"Experiment config: {args.config}\n", config)
 
     # Load TTA method
-    method = adapt_registry.get(config.MODEL.ADAPTATION)(config=config)    
+    method = adapt_registry.get(config.MODEL.ADAPTATION)(config=config)
     logger.info(method)
 
     # Run TTA engine

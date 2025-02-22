@@ -2,34 +2,23 @@
 
 ## Installation
 
-1. Install uv.
+1. Install poetry.
     ```bash
     # method 1.
-    pip install uv
-
-    # method 2.
-    curl -LsSf https://astral.sh/uv/install.sh | sh
+    pip install poetry
     ```
-2. Make virtualenv (Recommend: make it in project root directory)
+2. Install poetry packages
     ```bash
-    uv venv .venv --python=python3.11.11
+    poetry install
     ```
-3. Active the virtual env
-    ```bash
-    source .venv/bin/activate
-    ```
-4. Install uv packages with developer mode.
-    ```bash
-    uv pip install -e .
-    ```
-5. Run test code.
+3. Run test code.
     ```bash
     python tests/installation_check.py
     ```
 
 ## Run TTA
 
-1. Source test example      
+1. Source test example
     ```bash
-    python run_tta.py --config tta/config/cifar10c/source.yaml 
+    python run_tta.py --config config/cifar10c/source.yaml
     ```
