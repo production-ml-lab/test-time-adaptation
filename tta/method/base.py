@@ -1,11 +1,12 @@
 import os
+import logging
+from pathlib import Path
+from abc import ABC, abstractmethod
+from typing import List
+
 import torch
 import torch.nn as nn
 import torchvision
-import logging
-from abc import ABC, abstractmethod
-from typing import List
-from yacs.config import CfgNode
 
 from tta.model.resnet import build_resnet26
 
@@ -13,6 +14,7 @@ AVAILABLE_BACKEND = ["torchvision", "custom"]
 AVAILABLE_OPTIM = ["adam"]
 
 logger = logging.getLogger(__name__)
+DEFAULT_WEIGHT_DIR = Path(__file__).resolve().parents[1] / "asset"
 
 
 class BaseMethod(ABC):
@@ -67,9 +69,10 @@ class BaseMethod(ABC):
 
             if model_pretrain is not None:
                 # Load pretrained model
+                weight_path = DEFAULT_WEIGHT_DIR / "resnet26_cifar10.pth"
+                logger.info("load model from {weight_path}")
                 state_dict = torch.load(
-                    os.path.abspath("tta/asset/resnet26_cifar10.pth"),
-                    map_location=self.device,
+                    weight_path, map_location=self.device, weights_only=True
                 )
                 model.load_state_dict(state_dict=state_dict, strict=True)
 
