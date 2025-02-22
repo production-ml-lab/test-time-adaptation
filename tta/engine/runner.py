@@ -25,7 +25,6 @@ class Runner:
                 dataset = dataset_registry.get(self.config.DATA.NAME)(
                     corrupt_domain_orders=[shift_name],
                     severity=severity_level,
-                    num_samples=self.config.DATA.BATCH_SIZE,
                 )
                 test_loader = build_test_loader(
                     dataset, batch_size=self.config.DATA.BATCH_SIZE
