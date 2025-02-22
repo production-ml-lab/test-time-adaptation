@@ -1,10 +1,10 @@
+import logging
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torchvision
 import torchvision.transforms as transforms
-import logging
-import os
+
 from torch.utils.data import DataLoader
 from torchvision.datasets import CIFAR10
 
