@@ -1,5 +1,5 @@
 MODEL:
-    ADAPTATION: LAME
+    ADAPTATION: Lame
     NAME: resnet26
     BACKEND: custom
 DATA:

@@ -62,7 +62,7 @@ def entropy_energy(Y, unary, pairwise, bound_lambda):
 
 
 @ADAPTATION_REGISTRY.register()
-class LAME(BaseMethod):
+class Lame(BaseMethod):
     def __init__(self, config):
         super().__init__(config)
         self.affinity = kNN_affinity()
@@ -80,10 +80,10 @@ class LAME(BaseMethod):
     def predict(self, x):
         x = x.to(self.device)
         feats = self.model.forward_feature(x)
-        probas = self.model.forward(x)
+        logits = self.model.forward(x)
+        probas = F.softmax(logits, dim=1)
         feats = F.normalize(feats, p=2, dim=-1)  # [N, d]
         unary = -torch.log(probas + 1e-10)  # [N, K]
         kernel = self.affinity(feats)  # [N, N]
         Y = laplacian_optimization(unary, kernel)
-
         return Y.argmax(1)
