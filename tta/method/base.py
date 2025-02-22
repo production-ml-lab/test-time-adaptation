@@ -17,7 +17,13 @@ logger = logging.getLogger(__name__)
 
 class BaseMethod(ABC):
     def __init__(self, config) -> None:
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        if torch.cuda.is_available():
+            DEVICE = "cuda"
+        elif torch.mps.is_available():
+            DEVICE = "mps"
+        else:
+            DEVICE = "cpu"
+        self.device = DEVICE
         self.config = config
         self.model = self.get_model()
         self.params, param_names = self.collect_params()
