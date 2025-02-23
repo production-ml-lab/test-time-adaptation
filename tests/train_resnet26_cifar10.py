@@ -21,7 +21,12 @@ logger = logging.getLogger(__name__)
 BATCH_SIZE = 128
 EPOCHS = 50
 LEARNING_RATE = 0.001
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+if torch.cuda.is_available():
+    DEVICE = "cuda"
+elif torch.mps.is_available():
+    DEVICE = "mps"
+else:
+    DEVICE = "cpu"
 MODEL_SAVE_PATH = "resnet26_cifar10.pth"
 
 # CIFAR-10 데이터셋 변환 (Normalization 적용)
@@ -43,13 +48,13 @@ test_transform = transforms.Compose(
 
 # 데이터 로드
 train_dataset = CIFAR10(
-    root="test-time-adaptation/data",
+    root="dataset/cifar10",
     train=True,
     transform=train_transform,
     download=True,
 )
 test_dataset = CIFAR10(
-    root="test-time-adaptation/data",
+    root="dataset/cifar10",
     train=False,
     transform=test_transform,
     download=True,

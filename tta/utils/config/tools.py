@@ -1,7 +1,8 @@
 import os
 import argparse
 
-from ..config import cifar10c
+from tta.utils.config import cifar10c
+
 
 # CLI 인자 파싱 함수
 def parse_args():

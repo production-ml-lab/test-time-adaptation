@@ -2,7 +2,7 @@ import logging
 
 from tta.engine.runner import Runner
 from tta.misc.registry import ADAPTATION_REGISTRY
-from tta.config.utils import parse_args, load_config
+from tta.utils.config.tools import parse_args, load_config
 
 logger = logging.getLogger(__name__)
 

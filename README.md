@@ -33,7 +33,7 @@
 
 1. Source test example
     ```bash
-    python run_tta.py --config tta/config/cifar10c/source.yaml
+    python run_tta.py --config config/cifar10c/source.yaml
     ```
 
 ## For Developer
