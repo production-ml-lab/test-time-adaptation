@@ -26,7 +26,7 @@
     ```
 5. Run test code.
     ```bash
-    python tests/installation_check.py
+    make run-source
     ```
 
 ## Run TTA
