@@ -12,6 +12,7 @@ CORRUPTION_DOMAINS = cifar10c.SHIFT.TYPE
 
 DEFAULT_DATA_DIR = Path(__file__).parent.parent.parent.parent / "dataset"
 
+
 @DATASET_REGISTRY.register()
 class CifarDataset(Dataset):
     def __init__(

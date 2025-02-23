@@ -7,7 +7,8 @@ from tta.utils.data import build_test_loader
 
 dataset_registry = DATASET_REGISTRY
 
-class Runner():
+
+class Runner:
     def __init__(self, config: CfgNode, method: BaseMethod):
         self.config = config
         self.method = method
@@ -17,16 +18,17 @@ class Runner():
 
         self.results = {}
 
-    
     def run(self):
         for shift_name in self.shift_type:
             for severity_level in self.shift_serverity:
                 dataset = dataset_registry.get(self.config.DATA.NAME)(
-                    corrupt_domain_orders = [shift_name],
-                    severity = severity_level,
-                    num_samples = self.config.DATA.BATCH_SIZE
+                    corrupt_domain_orders=[shift_name],
+                    severity=severity_level,
+                    num_samples=self.config.DATA.BATCH_SIZE,
                 )
-                test_loader = build_test_loader(dataset, batch_size=self.config.DATA.BATCH_SIZE)
+                test_loader = build_test_loader(
+                    dataset, batch_size=self.config.DATA.BATCH_SIZE
+                )
 
                 preds = []
                 gts = []
@@ -39,21 +41,20 @@ class Runner():
                     gts.extend(y.tolist())
 
                 acc, err = self.get_accuracy(preds, gts)
-                self.results[f'{shift_name}_{severity_level}'] = math.floor(err * 1000) / 1000
+                self.results[f"{shift_name}_{severity_level}"] = (
+                    math.floor(err * 1000) / 1000
+                )
 
                 self.method.reset()
-        
+
         return self.results
 
-    
     def get_accuracy(self, preds, gts):
         assert len(preds) == len(gts)
         num_total = len(preds)
         num_correct = sum([1 if y_pred == y else 0 for y_pred, y in zip(preds, gts)])
-        
+
         acc = num_correct / num_total
         err = 1 - acc
 
         return acc, err
-
-
