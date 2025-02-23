@@ -6,10 +6,9 @@ from tta.misc.registry import ADAPTATION_REGISTRY
 
 @ADAPTATION_REGISTRY.register()
 class Tent(BaseMethod):
-
     def collect_params(self):
         return super().collect_params()
-    
+
     def set_loss(self):
         return super().set_loss()
 

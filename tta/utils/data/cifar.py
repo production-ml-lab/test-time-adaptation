@@ -4,13 +4,15 @@ from typing import List
 import torch
 import numpy as np
 from torch.utils.data import Dataset
-from robustbench.data import load_cifar10, load_cifar10c
+from robustbench.data import load_cifar10c
+
 from tta.misc.registry import DATASET_REGISTRY
-from tta.config import cifar10c
+from tta.utils.config import cifar10c
 
 CORRUPTION_DOMAINS = cifar10c.SHIFT.TYPE
 
-DEFAULT_DATA_DIR = Path(__file__).parent.parent.parent.parent / "dataset"
+DEFAULT_DATA_DIR = Path(__file__).resolve().parents[3] / "dataset" / "cifar10-c"
+
 
 @DATASET_REGISTRY.register()
 class CifarDataset(Dataset):
