@@ -49,6 +49,12 @@ _C.OPTIM.WD = 0.0       # L2 regularization (weight decay)
 # ---------- Tent ---------- #
 
 # ---------- MEMO ---------- #
+_C.MODEL.GROUP_NORM = 8
+_C.MODEL.CKPT_PATH = ''
+_C.DATA.NORM = CN()
+_C.DATA.NORM.MEAN = [0.5, 0.5, 0.5]
+_C.DATA.NORM.STD = [0.5, 0.5, 0.5]
+_C.OPTIM.STEPS = 1
 
 # ---------- LAME ---------- #
 
