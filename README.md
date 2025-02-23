@@ -74,3 +74,16 @@ make pre-commit
 
     __all__ = ["BaseMethod", ..., "MyNewMethod"]
     ```
+
+4. Write baseline method to `config/cifar10/my_new_method.yaml`
+    ```yaml
+    MODEL:
+        ADAPTATION: MyNewMethod
+        NAME: resnet26
+        BACKEND: custom
+    DATA:
+        BATCH_SIZE: YOUR_BATCH_SIZE
+    SHIFT:
+        SEVERITY: ...
+        TYPE: ...
+    ```
