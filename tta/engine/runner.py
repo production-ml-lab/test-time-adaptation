@@ -4,6 +4,8 @@ from yacs.config import CfgNode
 from tta.method import BaseMethod
 from tta.misc.registry import DATASET_REGISTRY
 from tta.utils.data import build_test_loader
+from tta.metrics import get_accuracy
+
 
 dataset_registry = DATASET_REGISTRY
 
@@ -40,7 +42,7 @@ class Runner:
                     preds.extend(y_pred.tolist())
                     gts.extend(y.tolist())
 
-                acc, err = self.get_accuracy(preds, gts)
+                acc, err = get_accuracy(preds, gts)
                 self.results[f"{shift_name}_{severity_level}"] = (
                     math.floor(err * 1000) / 1000
                 )
@@ -48,13 +50,3 @@ class Runner:
                 self.method.reset()
 
         return self.results
-
-    def get_accuracy(self, preds, gts):
-        assert len(preds) == len(gts)
-        num_total = len(preds)
-        num_correct = sum([1 if y_pred == y else 0 for y_pred, y in zip(preds, gts)])
-
-        acc = num_correct / num_total
-        err = 1 - acc
-
-        return acc, err
