@@ -2,9 +2,8 @@ MODEL:
   NAME: 'resnet26'
   BACKEND: 'custom'
   ADAPTATION: 'MEMO'
-  GROUP_NORM: 8
   NUM_CLASSES: 10
-
+  # GROUP_NORM: 8
 OPTIM:
   METHOD: 'sgd'
   LR: 0.005
