@@ -20,7 +20,7 @@ class BaseMethod(ABC):
     def __init__(self, config) -> None:
         if torch.cuda.is_available():
             DEVICE = "cuda"
-        elif torch.mps.is_available():
+        elif torch.backends.mps.is_available():
             DEVICE = "mps"
         else:
             DEVICE = "cpu"
