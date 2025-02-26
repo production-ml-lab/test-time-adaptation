@@ -8,8 +8,10 @@ import torch.nn as nn
 import torchvision
 
 from tta.model.resnet import build_resnet26
+from tta.model.wide_resnet import build_wide_resnet28_10
 
 AVAILABLE_BACKEND = ["torchvision", "custom"]
+AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
 AVAILABLE_OPTIM = ["adam"]
 DEFAULT_WEIGHT_DIR = Path(__file__).resolve().parents[1] / "asset"
 
@@ -61,18 +63,35 @@ class BaseMethod(ABC):
     def get_model(self) -> None:
         model_backend = self.config.MODEL.BACKEND
         model_pretrain = self.config.MODEL.PRETRAIN
+        model_name = self.config.MODEL.NAME
+
         assert model_backend in AVAILABLE_BACKEND
 
         if model_backend == "custom":
-            model = build_resnet26()
+            assert model_name in AVAILABLE_CUSTOM_MODEL
 
-            if model_pretrain is not None:
-                weight_path = DEFAULT_WEIGHT_DIR / "resnet26_cifar10.pth"
-                logger.info("load model from {weight_path}")
-                state_dict = torch.load(
-                    weight_path, map_location=self.device, weights_only=True
-                )
-                model.load_state_dict(state_dict=state_dict, strict=True)
+            if model_name == "resnet26":
+                model = build_resnet26()
+
+                if model_pretrain is not None:
+                    weight_path = DEFAULT_WEIGHT_DIR / "resnet26_cifar10.pth"
+                    logger.info("load model from {weight_path}")
+                    state_dict = torch.load(
+                        weight_path, map_location=self.device, weights_only=True
+                    )
+                    model.load_state_dict(state_dict=state_dict, strict=True)
+
+            elif model_name == "wide_resnet28_10":
+                model = build_wide_resnet28_10()
+
+                if model_pretrain is not None:
+                    weight_path = DEFAULT_WEIGHT_DIR / "wide_resnet28_10_cifar10.pth"
+                    logger.info("load model from {weight_path}")
+                    state_dict = torch.load(
+                        weight_path, map_location=self.device, weights_only=True
+                    )
+                    model.load_state_dict(state_dict=state_dict, strict=True)
+
             return model.to(self.device)
 
         elif model_backend == "torchvision":
