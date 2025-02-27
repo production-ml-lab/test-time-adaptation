@@ -85,6 +85,7 @@ class BaseMethod(ABC):
                 model = build_wide_resnet28_10()
 
                 if model_pretrain is not None:
+                    raise NotImplementedError
                     weight_path = DEFAULT_WEIGHT_DIR / "wide_resnet28_10_cifar10.pth"
                     logger.info("load model from {weight_path}")
                     state_dict = torch.load(
