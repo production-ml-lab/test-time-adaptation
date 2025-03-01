@@ -1,3 +1,8 @@
+# AVAILABLE_BACKEND = ["robustbench", "torchvision", "custom"]
+# AVAILABLE_ROBUST_MODEL = ["Standard"]
+# AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
+# AVAILABLE_OPTIM = ["adam"]
+
 MODEL:
   ADAPTATION: Source
   NAME: resnet26

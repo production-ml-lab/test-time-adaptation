@@ -6,11 +6,13 @@ from typing import List
 import torch
 import torch.nn as nn
 import torchvision
+from robustbench import load_model
 
 from tta.model.resnet import build_resnet26
 from tta.model.wide_resnet import build_wide_resnet28_10
 
-AVAILABLE_BACKEND = ["torchvision", "custom"]
+AVAILABLE_BACKEND = ["robustbench", "torchvision", "custom"]
+AVAILABLE_ROBUST_MODEL = ["Standard"]
 AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
 AVAILABLE_OPTIM = ["adam"]
 DEFAULT_WEIGHT_DIR = Path(__file__).resolve().parents[1] / "asset"
@@ -98,6 +100,14 @@ class BaseMethod(ABC):
         elif model_backend == "torchvision":
             available_models = torchvision.models.list_models(module=torchvision.models)
             raise NotImplementedError
+
+        elif model_backend == "robustbench":
+            assert model_name in AVAILABLE_ROBUST_MODEL
+
+            model = load_model(
+                model_name="Standard", dataset="cifar10", threat_model="Linf"
+            )
+            return model.to(self.device)
 
         else:
             raise NotImplementedError
