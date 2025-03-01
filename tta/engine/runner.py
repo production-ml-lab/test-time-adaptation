@@ -21,6 +21,8 @@ class Runner:
         self.results = {}
 
     def run(self):
+        num_exp = len(self.shift_type) * len(self.shift_serverity)
+        cnt = 0
         for shift_name in self.shift_type:
             for severity_level in self.shift_serverity:
                 dataset = dataset_registry.get(self.config.DATA.NAME)(
@@ -47,5 +49,10 @@ class Runner:
                 )
 
                 self.method.reset()
+
+                cnt += 1
+                print(
+                    f"[{cnt}/{num_exp}] TTA Evaluation is done on {shift_name}_{severity_level}"
+                )
 
         return self.results
