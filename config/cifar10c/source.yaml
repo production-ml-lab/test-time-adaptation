@@ -6,7 +6,7 @@
 MODEL:
   ADAPTATION: Source
   NAME: resnet26
-  BACKEND: custom
+  BACKEND: huggingface
 SHIFT:
   SEVERITY:
     - 5

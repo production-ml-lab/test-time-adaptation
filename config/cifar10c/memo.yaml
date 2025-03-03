@@ -1,11 +1,11 @@
 MODEL:
-  NAME: 'resnet26'
-  BACKEND: 'custom'
-  ADAPTATION: 'MEMO'
+  NAME: resnet26
+  BACKEND: huggingface
+  ADAPTATION: MEMO
   NUM_CLASSES: 10
   # GROUP_NORM: 8
 OPTIM:
-  METHOD: 'sgd'
+  METHOD: sgd
   LR: 0.005
   STEPS: 1
 
@@ -17,12 +17,26 @@ DATA:
     STD: [0.5, 0.5, 0.5]
   # for local
   # ROOT: 'dataset/CIFAR-10-C'
-
 SHIFT:
-  TYPE: [
-    'gaussian_noise', 'shot_noise', 'impulse_noise',
-    'defocus_blur', 'glass_blur', 'motion_blur', 'zoom_blur',
-    'snow', 'frost', 'fog', 'brightness',
-    'contrast', 'elastic_transform', 'pixelate', 'jpeg_compression'
-  ]
-  SEVERITY: [1, 2, 3, 4, 5]
+  SEVERITY:
+    - 5
+    - 4
+    - 3
+    - 2
+    - 1
+  TYPE:
+    - gaussian_noise
+    - shot_noise
+    - impulse_noise
+    - defocus_blur
+    - glass_blur
+    - motion_blur
+    - zoom_blur
+    - snow
+    - frost
+    - fog
+    - brightness
+    - contrast
+    - elastic_transform
+    - pixelate
+    - jpeg_compression

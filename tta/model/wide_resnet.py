@@ -1,9 +1,13 @@
 # https://github.com/RobustBench/robustbench/blob/master/robustbench/model_zoo/architectures/wide_resnet.py#L50
 
 import math
+from typing import Optional
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+from tta.model.huggingface import download_model
 
 
 class BasicBlock(nn.Module):
@@ -129,5 +133,18 @@ class WideResNet(nn.Module):
         return self.fc(out)
 
 
-def build_wide_resnet28_10():
-    return WideResNet(num_classes=10)
+def build_wide_resnet28_10(num_classes: int = 10):
+    return WideResNet(num_classes=num_classes)
+
+
+def load_wide_resnet28_10(
+    num_classes: int = 10,
+    pretrain: Optional[str] = None,
+    device: str = "cpu",
+):
+    model = build_wide_resnet28_10(num_classes=num_classes)
+    if pretrain is not None:
+        weight_path = download_model(model_name="wide_resnet26", data_name=pretrain)
+        state_dict = torch.load(weight_path, map_location=device, weights_only=True)
+        model.load_state_dict(state_dict=state_dict, strict=True)
+    return model

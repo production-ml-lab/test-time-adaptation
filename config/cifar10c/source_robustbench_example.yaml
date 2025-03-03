@@ -1,4 +1,4 @@
-# AVAILABLE_BACKEND = ["robustbench", "torchvision", "custom"]
+# AVAILABLE_BACKEND = ["robustbench", "torchvision", "huggingface"]
 # AVAILABLE_ROBUST_MODEL = ["Standard"]
 # AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
 # AVAILABLE_OPTIM = ["adam"]
