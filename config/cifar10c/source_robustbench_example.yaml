@@ -5,8 +5,8 @@
 
 MODEL:
   ADAPTATION: Source
-  NAME: resnet26
-  BACKEND: custom
+  NAME: Standard
+  BACKEND: robustbench
 SHIFT:
   SEVERITY:
     - 5
