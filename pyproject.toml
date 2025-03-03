@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [
+    "huggingface-hub>=0.29.1",
     "numpy==1.26.4",
     "robustbench",
     "setuptools>=75.8.0",

@@ -1,0 +1,5 @@
+cifar10:
+    resnet26:
+        repo_id: mlp-tta/resnet-26
+        filename: resnet26_cifar10.pth
+        revision: main

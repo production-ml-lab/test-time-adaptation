@@ -5,4 +5,4 @@ from .lame import Lame
 from .memo import MEMO
 
 
-__all__ = ["BaseMethod", "Source", "Tent", "Lame", 'MEMO']
+__all__ = ["BaseMethod", "Source", "Tent", "Lame", "MEMO"]

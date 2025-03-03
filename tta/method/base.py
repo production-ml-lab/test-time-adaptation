@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -8,14 +7,16 @@ import torch.nn as nn
 import torchvision
 from robustbench import load_model
 
+from tta.path import WEIGHT_DIR
 from tta.model.resnet import build_resnet26
 from tta.model.wide_resnet import build_wide_resnet28_10
+from tta.model.huggingface import download_model
 
 AVAILABLE_BACKEND = ["robustbench", "torchvision", "custom"]
 AVAILABLE_ROBUST_MODEL = ["Standard"]
 AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
 AVAILABLE_OPTIM = ["adam"]
-DEFAULT_WEIGHT_DIR = Path(__file__).resolve().parents[1] / "asset"
+
 
 logger = logging.getLogger(__name__)
 
@@ -93,6 +94,19 @@ class BaseMethod(ABC):
                     )
                     model.load_state_dict(state_dict=state_dict, strict=True)
 
+<<<<<<< HEAD
+=======
+            if model_pretrain is not None:
+                weight_path = download_model(
+                    model_name=self.config.MODEL.NAME,
+                    data_name=self.config.MODEL.PRETRAIN,
+                )
+                logger.info("load model from {weight_path}")
+                state_dict = torch.load(
+                    weight_path, map_location=self.device, weights_only=True
+                )
+                model.load_state_dict(state_dict=state_dict, strict=True)
+>>>>>>> 2753f40 (add hugginface hub to download model)
             return model.to(self.device)
 
         elif model_backend == "torchvision":
