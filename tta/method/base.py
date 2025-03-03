@@ -94,8 +94,6 @@ class BaseMethod(ABC):
                     )
                     model.load_state_dict(state_dict=state_dict, strict=True)
 
-<<<<<<< HEAD
-=======
             if model_pretrain is not None:
                 weight_path = download_model(
                     model_name=self.config.MODEL.NAME,
@@ -106,7 +104,6 @@ class BaseMethod(ABC):
                     weight_path, map_location=self.device, weights_only=True
                 )
                 model.load_state_dict(state_dict=state_dict, strict=True)
->>>>>>> 2753f40 (add hugginface hub to download model)
             return model.to(self.device)
 
         elif model_backend == "torchvision":
