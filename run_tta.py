@@ -29,6 +29,7 @@ def evaluate():
     runner = Runner(config=config, method=method)
     results = runner.run()
     formatted_results = format_experiment_results(results)
+    print(formatted_results)
     logger.info("\n" + formatted_results)
 
 
