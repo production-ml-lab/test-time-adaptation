@@ -7,6 +7,7 @@ from torchvision import transforms
 
 ## https://github.com/google-research/augmix
 
+
 def _augmix_aug(x_orig):
     x_orig = preaugment(x_orig)
     x_processed = preprocess(x_orig)
@@ -22,14 +23,17 @@ def _augmix_aug(x_orig):
     mix = m * x_processed + (1 - m) * mix
     return mix
 
+
 memo_aug = _augmix_aug
 
 
 def autocontrast(pil_img, level=None):
     return ImageOps.autocontrast(pil_img)
 
+
 def equalize(pil_img, level=None):
     return ImageOps.equalize(pil_img)
+
 
 def rotate(pil_img, level):
     degrees = int_parameter(rand_lvl(level), 30)
@@ -37,33 +41,63 @@ def rotate(pil_img, level):
         degrees = -degrees
     return pil_img.rotate(degrees, resample=Image.BILINEAR, fillcolor=128)
 
+
 def solarize(pil_img, level):
     level = int_parameter(rand_lvl(level), 256)
     return ImageOps.solarize(pil_img, 256 - level)
+
 
 def shear_x(pil_img, level):
     level = float_parameter(rand_lvl(level), 0.3)
     if np.random.uniform() > 0.5:
         level = -level
-    return pil_img.transform((32, 32), Image.AFFINE, (1, level, 0, 0, 1, 0), resample=Image.BILINEAR, fillcolor=128)
+    return pil_img.transform(
+        (32, 32),
+        Image.AFFINE,
+        (1, level, 0, 0, 1, 0),
+        resample=Image.BILINEAR,
+        fillcolor=128,
+    )
+
 
 def shear_y(pil_img, level):
     level = float_parameter(rand_lvl(level), 0.3)
     if np.random.uniform() > 0.5:
         level = -level
-    return pil_img.transform((32, 32), Image.AFFINE, (1, 0, 0, level, 1, 0), resample=Image.BILINEAR, fillcolor=128)
+    return pil_img.transform(
+        (32, 32),
+        Image.AFFINE,
+        (1, 0, 0, level, 1, 0),
+        resample=Image.BILINEAR,
+        fillcolor=128,
+    )
+
 
 def translate_x(pil_img, level):
     level = int_parameter(rand_lvl(level), 32 / 3)
     if np.random.random() > 0.5:
         level = -level
-    return pil_img.transform((32, 32), Image.AFFINE, (1, 0, level, 0, 1, 0), resample=Image.BILINEAR, fillcolor=128)
+    return pil_img.transform(
+        (32, 32),
+        Image.AFFINE,
+        (1, 0, level, 0, 1, 0),
+        resample=Image.BILINEAR,
+        fillcolor=128,
+    )
+
 
 def translate_y(pil_img, level):
     level = int_parameter(rand_lvl(level), 32 / 3)
     if np.random.random() > 0.5:
         level = -level
-    return pil_img.transform((32, 32), Image.AFFINE, (1, 0, 0, 0, 1, level), resample=Image.BILINEAR, fillcolor=128)
+    return pil_img.transform(
+        (32, 32),
+        Image.AFFINE,
+        (1, 0, 0, 0, 1, level),
+        resample=Image.BILINEAR,
+        fillcolor=128,
+    )
+
 
 def posterize(pil_img, level):
     level = int_parameter(rand_lvl(level), 4)
@@ -81,6 +115,7 @@ def int_parameter(level, maxval):
     """
     return int(level * maxval / 10)
 
+
 def float_parameter(level, maxval):
     """Helper function to scale `val` between 0 and maxval .
     Args:
@@ -90,7 +125,8 @@ def float_parameter(level, maxval):
     Returns:
     A float that results from scaling `maxval` according to `level`.
     """
-    return float(level) * maxval / 10.
+    return float(level) * maxval / 10.0
+
 
 def rand_lvl(n):
     return np.random.uniform(low=0.1, high=n)
@@ -110,11 +146,12 @@ augmentations = [
 
 mean = [0.5, 0.5, 0.5]
 std = [0.5, 0.5, 0.5]
-preprocess = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize(mean, std)
-])
-preaugment = transforms.Compose([
-    transforms.RandomCrop(32, padding=4),
-    transforms.RandomHorizontalFlip(),
-]) 
+preprocess = transforms.Compose(
+    [transforms.ToTensor(), transforms.Normalize(mean, std)]
+)
+preaugment = transforms.Compose(
+    [
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+    ]
+)

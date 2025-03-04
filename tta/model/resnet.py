@@ -4,10 +4,13 @@
 
 import math
 import logging
+from typing import Optional
 
 import torch
 from torch import nn
 from torchvision.models.resnet import conv3x3
+
+from tta.model.huggingface import download_model
 
 logger = logging.getLogger(__name__)
 
@@ -118,9 +121,23 @@ class ResNetCifar(nn.Module):
         return x
 
 
-def build_resnet26(groups=8, num_classes=10):
+def build_resnet26(groups: int = 8, num_classes: int = 10):
     def gn_helper(planes):
         return nn.GroupNorm(groups, planes)
 
     model = ResNetCifar(26, 1, channels=3, classes=num_classes, norm_layer=gn_helper)
+    return model
+
+
+def load_resnet26(
+    groups: int = 8,
+    num_classes: int = 10,
+    pretrain: Optional[str] = "cifar10",
+    device: str = "cpu",
+):
+    model = build_resnet26(groups=groups, num_classes=num_classes)
+    if pretrain is not None:
+        weight_path = download_model(model_name="resnet26", data_name=pretrain)
+        state_dict = torch.load(weight_path, map_location=device, weights_only=True)
+        model.load_state_dict(state_dict=state_dict, strict=True)
     return model

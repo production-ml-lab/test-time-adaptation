@@ -1,7 +1,7 @@
 MODEL:
     ADAPTATION: Lame
     NAME: resnet26
-    BACKEND: custom
+    BACKEND: huggingface
 DATA:
     BATCH_SIZE: 4
 SHIFT:

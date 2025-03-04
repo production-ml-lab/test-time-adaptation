@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -8,14 +7,14 @@ import torch.nn as nn
 import torchvision
 from robustbench import load_model
 
-from tta.model.resnet import build_resnet26
-from tta.model.wide_resnet import build_wide_resnet28_10
+from tta.path import WEIGHT_DIR
+from tta.model import load_resnet26, load_wide_resnet28_10
 
-AVAILABLE_BACKEND = ["robustbench", "torchvision", "custom"]
+AVAILABLE_BACKEND = ["robustbench", "torchvision", "huggingface"]
 AVAILABLE_ROBUST_MODEL = ["Standard"]
 AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
 AVAILABLE_OPTIM = ["adam"]
-DEFAULT_WEIGHT_DIR = Path(__file__).resolve().parents[1] / "asset"
+
 
 logger = logging.getLogger(__name__)
 
@@ -69,30 +68,19 @@ class BaseMethod(ABC):
 
         assert model_backend in AVAILABLE_BACKEND
 
-        if model_backend == "custom":
+        if model_backend == "huggingface":
             assert model_name in AVAILABLE_CUSTOM_MODEL
 
             if model_name == "resnet26":
-                model = build_resnet26()
-
-                if model_pretrain is not None:
-                    weight_path = DEFAULT_WEIGHT_DIR / "resnet26_cifar10.pth"
-                    state_dict = torch.load(
-                        weight_path, map_location=self.device, weights_only=True
-                    )
-                    model.load_state_dict(state_dict=state_dict, strict=True)
-
+                model = load_resnet26(
+                    pretrain=self.config.MODEL.PRETRAIN,
+                    device=self.device,
+                )
             elif model_name == "wide_resnet28_10":
-                model = build_wide_resnet28_10()
-
-                if model_pretrain is not None:
-                    raise NotImplementedError
-                    weight_path = DEFAULT_WEIGHT_DIR / "wide_resnet28_10_cifar10.pth"
-                    state_dict = torch.load(
-                        weight_path, map_location=self.device, weights_only=True
-                    )
-                    model.load_state_dict(state_dict=state_dict, strict=True)
-
+                model = load_wide_resnet28_10(
+                    pretrain=self.config.MODEL.PRETRAIN,
+                    device=self.device,
+                )
             return model.to(self.device)
 
         elif model_backend == "torchvision":
@@ -103,7 +91,10 @@ class BaseMethod(ABC):
             assert model_name in AVAILABLE_ROBUST_MODEL
 
             model = load_model(
-                model_name="Standard", dataset="cifar10", threat_model="Linf"
+                model_name="Standard",
+                model_dir=WEIGHT_DIR / "robustbench",
+                dataset="cifar10",
+                threat_model="Linf",
             )
             return model.to(self.device)
 

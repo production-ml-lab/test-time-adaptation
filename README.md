@@ -87,3 +87,25 @@ make pre-commit
         SEVERITY: ...
         TYPE: ...
     ```
+
+## Baseline Model with Huggingface Backend
+
+Install `huggingface-cli`.
+
+```bash
+pip install huggingface-cli
+```
+
+Login to huggingface hub.
+
+```bash
+huggingface-cli login
+```
+
+### Upload
+
+Upload model to hub.
+
+```bash
+huggingface-cli upload mlp-tta/resnet-26 models/resnet-26 .
+```

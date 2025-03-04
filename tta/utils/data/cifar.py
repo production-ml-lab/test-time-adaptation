@@ -8,17 +8,16 @@ from robustbench.data import load_cifar10c
 
 from tta.misc.registry import DATASET_REGISTRY
 from tta.utils.config import cifar10c
+from tta.path import DATA_DIR
 
 CORRUPTION_DOMAINS = cifar10c.SHIFT.TYPE
-
-DEFAULT_DATA_DIR = Path(__file__).resolve().parents[3] / "dataset" / "cifar10-c"
 
 
 @DATASET_REGISTRY.register()
 class CifarDataset(Dataset):
     def __init__(
         self,
-        data_dir: str = str(DEFAULT_DATA_DIR),
+        data_dir: str = str(DATA_DIR / "cifar10-c"),
         corrupt_domain_orders: List[str] = CORRUPTION_DOMAINS,
         severity: int = 5,
         num_samples: int = 100,

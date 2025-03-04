@@ -18,7 +18,6 @@ _C.MODEL.PRETRAIN = "cifar10"
 _C.DATA = CN()
 
 _C.DATA.NAME = "CifarDataset"  # Benchmark name
-_C.DATA.ROOT = "/data/cifar10c"
 _C.DATA.BATCH_SIZE = 200
 _C.DATA.NUM_WORKERS = 4
 
