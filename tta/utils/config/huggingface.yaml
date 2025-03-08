@@ -3,3 +3,8 @@ cifar10:
         repo_id: mlp-tta/resnet-26
         filename: resnet26_cifar10.pth
         revision: main
+
+    wide_resnet28_10:
+        repo_id: mlp-tta/wide_resnet28_10
+        filename: wide_resnet28_10.tar
+        revision: main
