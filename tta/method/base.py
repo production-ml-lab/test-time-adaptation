@@ -4,10 +4,7 @@ from typing import List
 
 import torch
 import torch.nn as nn
-import torchvision
-from robustbench import load_model
 
-from tta.path import WEIGHT_DIR
 from tta.model import load_resnet26, load_wide_resnet28_10
 
 AVAILABLE_BACKEND = ["robustbench", "huggingface"]
