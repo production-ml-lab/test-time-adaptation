@@ -1,4 +1,4 @@
-# https://github.com/RobustBench/robustbench/blob/master/robustbench/model_zoo/architectures/wide_resnet.py#L50
+# https://github.com/xternalz/WideResNet-pytorch/blob/master/wideresnet.py
 
 import math
 from typing import Optional
@@ -75,17 +75,7 @@ class NetworkBlock(nn.Module):
 
 
 class WideResNet(nn.Module):
-    """Based on code from https://github.com/yaodongyu/TRADES"""
-
-    def __init__(
-        self,
-        depth=28,
-        num_classes=10,
-        widen_factor=10,
-        sub_block1=False,
-        dropRate=0.0,
-        bias_last=True,
-    ):
+    def __init__(self, depth=28, num_classes=10, widen_factor=10, dropRate=0.0):
         super(WideResNet, self).__init__()
         nChannels = [16, 16 * widen_factor, 32 * widen_factor, 64 * widen_factor]
         assert (depth - 4) % 6 == 0
@@ -97,11 +87,6 @@ class WideResNet(nn.Module):
         )
         # 1st block
         self.block1 = NetworkBlock(n, nChannels[0], nChannels[1], block, 1, dropRate)
-        if sub_block1:
-            # 1st sub-block
-            self.sub_block1 = NetworkBlock(
-                n, nChannels[0], nChannels[1], block, 1, dropRate
-            )
         # 2nd block
         self.block2 = NetworkBlock(n, nChannels[1], nChannels[2], block, 2, dropRate)
         # 3rd block
@@ -109,17 +94,16 @@ class WideResNet(nn.Module):
         # global average pooling and classifier
         self.bn1 = nn.BatchNorm2d(nChannels[3])
         self.relu = nn.ReLU(inplace=True)
-        self.fc = nn.Linear(nChannels[3], num_classes, bias=bias_last)
+        self.fc = nn.Linear(nChannels[3], num_classes)
         self.nChannels = nChannels[3]
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                m.weight.data.normal_(0, math.sqrt(2.0 / n))
+                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
             elif isinstance(m, nn.BatchNorm2d):
                 m.weight.data.fill_(1)
                 m.bias.data.zero_()
-            elif isinstance(m, nn.Linear) and not m.bias is None:
+            elif isinstance(m, nn.Linear):
                 m.bias.data.zero_()
 
     def forward(self, x):
@@ -134,7 +118,7 @@ class WideResNet(nn.Module):
 
 
 def build_wide_resnet28_10(num_classes: int = 10):
-    return WideResNet(num_classes=num_classes)
+    return WideResNet(depth=28, num_classes=num_classes, widen_factor=10)
 
 
 def load_wide_resnet28_10(
@@ -144,7 +128,9 @@ def load_wide_resnet28_10(
 ):
     model = build_wide_resnet28_10(num_classes=num_classes)
     if pretrain is not None:
-        weight_path = download_model(model_name="wide_resnet26", data_name=pretrain)
-        state_dict = torch.load(weight_path, map_location=device, weights_only=True)
+        weight_path = download_model(model_name="wide_resnet28_10", data_name=pretrain)
+        state_dict = torch.load(weight_path, map_location=device, weights_only=True)[
+            "state_dict"
+        ]
         model.load_state_dict(state_dict=state_dict, strict=True)
     return model
