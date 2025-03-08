@@ -10,9 +10,8 @@ from robustbench import load_model
 from tta.path import WEIGHT_DIR
 from tta.model import load_resnet26, load_wide_resnet28_10
 
-AVAILABLE_BACKEND = ["robustbench", "torchvision", "huggingface"]
-AVAILABLE_ROBUST_MODEL = ["Standard"]
-AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
+AVAILABLE_BACKEND = ["robustbench", "huggingface"]
+AVAILABLE_MODEL = ["resnet26", "wide_resnet28_10"]
 AVAILABLE_OPTIM = ["adam"]
 
 
@@ -67,39 +66,20 @@ class BaseMethod(ABC):
         model_name = self.config.MODEL.NAME
 
         assert model_backend in AVAILABLE_BACKEND
+        assert model_name in AVAILABLE_MODEL
 
-        if model_backend == "huggingface":
-            assert model_name in AVAILABLE_CUSTOM_MODEL
-
-            if model_name == "resnet26":
-                model = load_resnet26(
-                    pretrain=self.config.MODEL.PRETRAIN,
-                    device=self.device,
-                )
-            elif model_name == "wide_resnet28_10":
-                model = load_wide_resnet28_10(
-                    pretrain=self.config.MODEL.PRETRAIN,
-                    device=self.device,
-                )
-            return model.to(self.device)
-
-        elif model_backend == "torchvision":
-            available_models = torchvision.models.list_models(module=torchvision.models)
-            raise NotImplementedError
-
-        elif model_backend == "robustbench":
-            assert model_name in AVAILABLE_ROBUST_MODEL
-
-            model = load_model(
-                model_name="Standard",
-                model_dir=WEIGHT_DIR / "robustbench",
-                dataset="cifar10",
-                threat_model="Linf",
+        if model_name == "resnet26":
+            model = load_resnet26(
+                pretrain=model_pretrain,
+                device=self.device,
             )
-            return model.to(self.device)
-
-        else:
-            raise NotImplementedError
+        elif model_name == "wide_resnet28_10":
+            model = load_wide_resnet28_10(
+                backend=model_backend,
+                pretrain=model_pretrain,
+                device=self.device,
+            )
+        return model.to(self.device)
 
     def set_optimizer(self) -> torch.optim:
         """Define the optimizer for the method."""

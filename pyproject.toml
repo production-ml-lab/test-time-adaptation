@@ -18,6 +18,11 @@ dependencies = [
 [tool.uv.sources]
 robustbench = { git = "https://github.com/RobustBench/robustbench.git" }
 
+[project.optional-dependencies]
+dev = [
+    "ipython",
+    "ipykernel",
+]
 
 [build-system]
 requires = ["setuptools"]
