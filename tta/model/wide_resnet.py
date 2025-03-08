@@ -1,13 +1,12 @@
 # https://github.com/xternalz/WideResNet-pytorch/blob/master/wideresnet.py
 
-import math
 from typing import Optional
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from tta.model.huggingface import download_model
+from tta.model.utils import load_huggingface_model, load_robustbench_model
 
 
 class BasicBlock(nn.Module):
@@ -106,7 +105,7 @@ class WideResNet(nn.Module):
             elif isinstance(m, nn.Linear):
                 m.bias.data.zero_()
 
-    def forward(self, x):
+    def forward_feature(self, x):
         out = self.conv1(x)
         out = self.block1(out)
         out = self.block2(out)
@@ -114,6 +113,10 @@ class WideResNet(nn.Module):
         out = self.relu(self.bn1(out))
         out = F.avg_pool2d(out, 8)
         out = out.view(-1, self.nChannels)
+        return out
+
+    def forward(self, x):
+        out = self.forward_feature(x)
         return self.fc(out)
 
 
@@ -123,14 +126,19 @@ def build_wide_resnet28_10(num_classes: int = 10):
 
 def load_wide_resnet28_10(
     num_classes: int = 10,
+    backend: str = "huggingface",
     pretrain: Optional[str] = None,
     device: str = "cpu",
 ):
     model = build_wide_resnet28_10(num_classes=num_classes)
     if pretrain is not None:
-        weight_path = download_model(model_name="wide_resnet28_10", data_name=pretrain)
-        state_dict = torch.load(weight_path, map_location=device, weights_only=True)[
-            "state_dict"
-        ]
+        if backend == "huggingface":
+            state_dict = load_huggingface_model(
+                model_name="wide_resnet28_10", data_name=pretrain
+            )
+        elif backend == "robustbench":
+            state_dict = load_robustbench_model(data_name=pretrain)
+        else:
+            raise f"{backend} is not supported backend name."
         model.load_state_dict(state_dict=state_dict, strict=True)
-    return model
+    return model.to(device)

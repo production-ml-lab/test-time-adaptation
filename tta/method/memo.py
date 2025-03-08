@@ -1,5 +1,4 @@
 import torch
-import torch.nn as nn
 import torch.optim as optim
 import torchvision.transforms as transforms
 from PIL import Image
@@ -7,7 +6,6 @@ from PIL import Image
 from tta.method import BaseMethod
 from tta.misc.registry import ADAPTATION_REGISTRY
 from tta.utils.data.memo import memo_aug
-from tta.utils.data.cifar import CifarDataset
 
 
 @ADAPTATION_REGISTRY.register()

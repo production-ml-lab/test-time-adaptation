@@ -10,7 +10,7 @@ import torch
 from torch import nn
 from torchvision.models.resnet import conv3x3
 
-from tta.model.huggingface import download_model
+from tta.model.utils import load_huggingface_model
 
 logger = logging.getLogger(__name__)
 
@@ -60,13 +60,13 @@ class Downsample(nn.Module):
         return torch.cat([x] + [x.mul(0)] * (self.expand_ratio - 1), 1)
 
 
-class ResNetCifar(nn.Module):
+class ResNet(nn.Module):
     def __init__(
         self, depth, width=1, classes=10, channels=3, norm_layer=nn.BatchNorm2d
     ):
         assert (depth - 2) % 6 == 0  # depth is 6N+2
         self.N = (depth - 2) // 6
-        super(ResNetCifar, self).__init__()
+        super(ResNet, self).__init__()
 
         # Following the Wide ResNet convention, we fix the very first convolution
         self.conv1 = nn.Conv2d(
@@ -125,19 +125,21 @@ def build_resnet26(groups: int = 8, num_classes: int = 10):
     def gn_helper(planes):
         return nn.GroupNorm(groups, planes)
 
-    model = ResNetCifar(26, 1, channels=3, classes=num_classes, norm_layer=gn_helper)
+    model = ResNet(26, 1, channels=3, classes=num_classes, norm_layer=gn_helper)
     return model
 
 
 def load_resnet26(
     groups: int = 8,
     num_classes: int = 10,
+    backend: str = "huggingface",
     pretrain: Optional[str] = "cifar10",
     device: str = "cpu",
 ):
     model = build_resnet26(groups=groups, num_classes=num_classes)
     if pretrain is not None:
-        weight_path = download_model(model_name="resnet26", data_name=pretrain)
-        state_dict = torch.load(weight_path, map_location=device, weights_only=True)
+        if backend != "huggingface":
+            print("Resent26 model supports only huggingface backend.")
+        state_dict = load_huggingface_model(model_name="resnet26", data_name=pretrain)
         model.load_state_dict(state_dict=state_dict, strict=True)
-    return model
+    return model.to(device)
