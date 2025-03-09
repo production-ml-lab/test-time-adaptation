@@ -19,7 +19,7 @@ def evaluate():
     args = parse_args()
     config = load_config(args.config, args.opts)
     config_name = args.config.split("/")[-2] + "_" + args.config.split("/")[-1]
-    logger = setup_logger(config_name)
+    logger = setup_logger(config_name, config)
     logger.info(f"Experiment config: {args.config}\n", config)
 
     # Load TTA method
