@@ -1,6 +1,7 @@
 import os
 import argparse
 import logging
+import yaml
 
 from datetime import datetime
 from tabulate import tabulate
@@ -48,7 +49,7 @@ def load_config(cfg_path, opts):
     return config
 
 
-def setup_logger(config_name):
+def setup_logger(config_name, config):
     # Get the current date and time in a nice format
     date_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -69,6 +70,11 @@ def setup_logger(config_name):
     logger = logging.getLogger()
     logger.addHandler(file_handler)
     logger.setLevel(logging.INFO)  # or another level you prefer
+
+    # Save config file
+    config_file = os.path.join(log_dir, "config.yaml")
+    with open(config_file, "w") as f:
+        f.write(config.dump())
 
     return logger
 
