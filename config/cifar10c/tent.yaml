@@ -1,0 +1,14 @@
+MODEL:
+  ADAPTATION: "Tent"
+  NAME: "wide_resnet28_10"
+  BACKEND: "huggingface"
+  PRETRAIN: "cifar10"
+  
+DATA:
+  BATCH_SIZE: 200
+  NUM_WORKERS: 4
+
+OPTIM:
+  METHOD: "adam"
+  LR: 1e-3
+  STEPS: 1
