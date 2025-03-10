@@ -1,5 +1,5 @@
 MODEL:
-  NAME: 'Standard'
+  NAME: 'wide_resnet28_10'
   BACKEND: 'robustbench'
   ADAPTATION: 'SHOT'
   NUM_CLASSES: 10
