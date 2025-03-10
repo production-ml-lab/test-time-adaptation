@@ -16,7 +16,7 @@ DATA:
     MEAN: [0.5, 0.5, 0.5]
     STD: [0.5, 0.5, 0.5]
   # for local
-  # ROOT: 'dataset/CIFAR-10-C'    
+  # ROOT: 'dataset/CIFAR-10-C'
 
 SHIFT:
   TYPE: [
@@ -25,4 +25,4 @@ SHIFT:
     'snow', 'frost', 'fog', 'brightness',
     'contrast', 'elastic_transform', 'pixelate', 'jpeg_compression'
   ]
-  SEVERITY: [1, 2, 3, 4, 5] 
+  SEVERITY: [1, 2, 3, 4, 5]

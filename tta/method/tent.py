@@ -51,7 +51,7 @@ class Tent(BaseMethod):
         for nm, m in self.model.named_modules():
             if isinstance(m, nn.BatchNorm2d):
                 for np, p in m.named_parameters():
-                    if np in ['weight', 'bias']:
+                    if np in ["weight", "bias"]:
                         params.append(p)
                         names.append(f"{nm}.{np}")
         return params, names
