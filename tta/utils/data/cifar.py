@@ -20,7 +20,7 @@ class CifarDataset(Dataset):
         data_dir: str = str(DATA_DIR / "cifar10-c"),
         corrupt_domain_orders: List[str] = CORRUPTION_DOMAINS,
         severity: int = 5,
-        num_samples: int = 100,
+        num_samples: int = 10000,
     ):
         super().__init__()
         self.data_dir = data_dir

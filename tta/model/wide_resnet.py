@@ -132,13 +132,6 @@ def load_wide_resnet28_10(
 ):
     model = build_wide_resnet28_10(num_classes=num_classes)
     if pretrain is not None:
-        if backend == "huggingface":
-            state_dict = load_huggingface_model(
-                model_name="wide_resnet28_10", data_name=pretrain
-            )
-        elif backend == "robustbench":
-            state_dict = load_robustbench_model(data_name=pretrain)
-        else:
-            raise f"{backend} is not supported backend name."
-        model.load_state_dict(state_dict=state_dict, strict=True)
+        if backend == "robustbench":
+            model = load_robustbench_model(data_name=pretrain)
     return model.to(device)

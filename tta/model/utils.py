@@ -54,4 +54,4 @@ def load_robustbench_model(data_name: str):
         dataset=data_name,
         threat_model="Linf",
     )
-    return model.state_dict()
+    return model
