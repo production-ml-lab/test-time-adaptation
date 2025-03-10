@@ -108,4 +108,10 @@ class BaseMethod(ABC):
         """Reset the model and optimizer state to the initial source state."""
         self.model = self.get_model()
         self.params, param_names = self.collect_params()
-        self.optimzer = self.set_optimizer()
+        self.optimizer = self.set_optimizer()
+
+    def reset(self) -> None:
+        """Reset the model and optimizer state to the initial source state."""
+        self.model = self.get_model()
+        self.params, param_names = self.collect_params()
+        self.optimizer = self.set_optimizer()
