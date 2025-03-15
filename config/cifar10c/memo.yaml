@@ -1,6 +1,6 @@
 MODEL:
-  NAME: resnet26
-  BACKEND: huggingface
+  NAME: wide_resent28_10
+  BACKEND: robustbench
   ADAPTATION: MEMO
   NUM_CLASSES: 10
   # GROUP_NORM: 8
@@ -10,8 +10,9 @@ OPTIM:
   STEPS: 1
 
 DATA:
-  BATCH_SIZE: 32
-  NUM_WORKERS: 8
+  BATCH_SIZE: 1
+  NUM_AUG: 32
+  NUM_WORKERS: 4
   NORM:
     MEAN: [0.5, 0.5, 0.5]
     STD: [0.5, 0.5, 0.5]
@@ -20,10 +21,6 @@ DATA:
 SHIFT:
   SEVERITY:
     - 5
-    - 4
-    - 3
-    - 2
-    - 1
   TYPE:
     - gaussian_noise
     - shot_noise

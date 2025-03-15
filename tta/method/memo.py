@@ -67,9 +67,7 @@ class MEMO(BaseMethod):
             self.model.train()
             for _ in range(self.config.OPTIM.STEPS):
                 # augmentation으로 batch 생성
-                aug_imgs = [
-                    memo_aug(pil_img) for _ in range(self.config.DATA.BATCH_SIZE)
-                ]
+                aug_imgs = [memo_aug(pil_img) for _ in range(self.config.DATA.NUM_AUG)]
                 aug_imgs = torch.stack(aug_imgs).to(self.device)
 
                 # adaptation step

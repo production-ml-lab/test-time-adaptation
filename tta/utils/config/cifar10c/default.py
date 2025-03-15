@@ -64,6 +64,7 @@ _C.OPTIM.WD = 0.0  # L2 regularization (weight decay)
 _C.DATA.NORM = CN()
 _C.DATA.NORM.MEAN = [0.5, 0.5, 0.5]
 _C.DATA.NORM.STD = [0.5, 0.5, 0.5]
+_C.DATA.NUM_AUG = 32
 _C.OPTIM.STEPS = 1
 
 # ---------- LAME ---------- #
