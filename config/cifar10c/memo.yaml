@@ -1,5 +1,5 @@
 MODEL:
-  NAME: wide_resent28_10
+  NAME: wide_resnet28_10
   BACKEND: robustbench
   ADAPTATION: MEMO
   NUM_CLASSES: 10
