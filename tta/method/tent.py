@@ -11,10 +11,12 @@ def softmax_entropy(x: torch.Tensor) -> torch.Tensor:
     """Tent 논문의 엔트로피 함수 정의"""
     return -(x.softmax(1) * x.log_softmax(1)).sum(1)
 
+
 @ADAPTATION_REGISTRY.register()
 class Tent(BaseMethod):
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, optim_steps: int, **kwargs):
+        super().__init__(**kwargs)
+        self.optim_steps = optim_steps
         self._configure_model()
         self.params, _ = self.collect_params()
         self.optimizer = self.set_optimizer()
@@ -28,7 +30,6 @@ class Tent(BaseMethod):
         else:
             outputs = self.model(x)
         return outputs.argmax(1)
-
 
     def _configure_model(self):
         """
@@ -50,9 +51,6 @@ class Tent(BaseMethod):
                 m.running_mean = None
                 m.running_var = None
 
-        # 3) train 모드
-        self.model.train()
-
     def collect_params(self):
         """
         BN의 weight, bias만 모아서 optimizer에 등록
@@ -66,32 +64,29 @@ class Tent(BaseMethod):
                         names.append(f"{nm}.{np}")
         return params, names
 
-
     def set_loss(self):
         return self._entropy_loss
 
-
-    @torch.enable_grad()
     def forward_and_adapt(self, x):
+        self.model.train()
         x = x.to(self.device)
         outputs = self.model(x)
-        loss = self.loss(outputs)
-        loss.backward()
-        self.optimizer.step()
-        self.optimizer.zero_grad()
+        for _ in range(self.optim_steps):
+            self.optimizer.zero_grad()
+            outputs = self.model(x)
+            loss = self.loss(outputs)
+            loss.backward()
+            self.optimizer.step()
         return outputs
-
 
     def _entropy_loss(self, logits):
         return softmax_entropy(logits).mean()
-
 
     def reset(self):
         """Corruption 변경 시 초기 상태 복원"""
         self.model.load_state_dict(self.model_state)
         self.optimizer.load_state_dict(self.optimizer_state)
         self.model.to(self.device)
-
 
     @torch.no_grad()
     def predict(self, x):

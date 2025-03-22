@@ -63,8 +63,8 @@ def entropy_energy(Y, unary, pairwise, bound_lambda):
 
 @ADAPTATION_REGISTRY.register()
 class Lame(BaseMethod):
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.affinity = kNN_affinity()
 
     def collect_params(self):

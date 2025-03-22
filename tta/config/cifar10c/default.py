@@ -29,6 +29,8 @@ _C.METHOD.OPTIM_WD = 0.0  # L2 regularization (weight decay)
 _C.METHOD.NORM_MEAN = [0.5, 0.5, 0.5]
 _C.METHOD.NORM_STD = [0.5, 0.5, 0.5]
 _C.METHOD.OPTIM_STEPS = 1
+_C.METHOD.AUG_BATCH_SIZE = 4
+
 
 # ---------- LAME ---------- #
 

@@ -10,7 +10,7 @@ from tta.model import load_resnet26, load_wide_resnet28_10
 
 AVAILABLE_BACKEND = ["robustbench", "huggingface"]
 AVAILABLE_MODEL = ["resnet26", "wide_resnet28_10"]
-AVAILABLE_OPTIM = ["adam"]
+AVAILABLE_OPTIM = ["adam", "sgd"]
 
 
 logger = logging.getLogger(__name__)
@@ -25,20 +25,13 @@ else:
 class BaseMethod(ABC):
     def __init__(
         self,
-        model_name: str,
-        model_backend: str,
-        model_pretrain: str,
-        optim_method: str,
-        optim_lr: float,
-        optim_beta: float,
-        optim_wd: float,
-        # model_name: str = "wide_resnet28_10",
-        # model_backend: str = "robustbench",
-        # model_pretrain: str = "cifar10",
-        # optim_method: str = "adam",
-        # optim_lr: float = 1e-4,
-        # optim_beta: float = 0.9,
-        # optim_wd: float = 0.0,
+        model_name: str = "wide_resnet28_10",
+        model_backend: str = "robustbench",
+        model_pretrain: str = "cifar10",
+        optim_method: str = "adam",
+        optim_lr: float = 1e-4,
+        optim_beta: float = 0.9,
+        optim_wd: float = 0.0,
         device: str = DEVICE,
         **kwargs,
     ) -> None:
@@ -117,6 +110,8 @@ class BaseMethod(ABC):
                 betas=(self.optim_beta, 0.999),
                 weight_decay=self.optim_wd,
             )
+        elif optim_method == "sgd":
+            return torch.optim.SGD(self.params, lr=self.optim_lr)
         else:
             raise NotImplementedError
 
@@ -127,12 +122,6 @@ class BaseMethod(ABC):
             f"#Trainable/total parameters: {trainable:,}/{total:,} \t Ratio: {trainable / total * 100:.3f}% "
         )
         return trainable, total
-
-    def reset(self) -> None:
-        """Reset the model and optimizer state to the initial source state."""
-        self.model = self.get_model()
-        self.params, param_names = self.collect_params()
-        self.optimizer = self.set_optimizer()
 
     def reset(self) -> None:
         """Reset the model and optimizer state to the initial source state."""

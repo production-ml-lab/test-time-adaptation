@@ -2,13 +2,13 @@
 # AVAILABLE_ROBUST_MODEL = ["Standard"]
 # AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
 # AVAILABLE_OPTIM = ["adam"]
+METHOD:
+  NAME: Source
 
 MODEL:
   NAME: wide_resnet28_10
   BACKEND: robustbench
 
-METHOD:
-  NAME: Source
 
 DATA:
   NUM_SAMPLES: 100
