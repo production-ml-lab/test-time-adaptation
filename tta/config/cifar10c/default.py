@@ -8,8 +8,8 @@ _C.MISC = CN()
 
 # ---------- model ---------- #
 _C.MODEL = CN()
-_C.MODEL.NAME = "resnet26"
-_C.MODEL.BACKEND = "custom"
+_C.MODEL.NAME = "wide_resnet28_10"
+_C.MODEL.BACKEND = "robustbench"
 _C.MODEL.NUM_CLASSES = 10
 _C.MODEL.ADAPTATION = "Source"
 _C.MODEL.PRETRAIN = "cifar10"
@@ -41,7 +41,7 @@ _C.SHIFT.TYPE = [
     "pixelate",
     "jpeg_compression",
 ]
-_C.SHIFT.SEVERITY = [5, 4, 3, 2, 1]
+_C.SHIFT.SEVERITY = [5]
 
 # ---------- optimizer ---------- #
 _C.OPTIM = CN()
