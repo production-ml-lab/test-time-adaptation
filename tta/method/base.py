@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 
 from tta.model import load_resnet26, load_wide_resnet28_10
+from tta.config.utils import load_default_config
 
 AVAILABLE_BACKEND = ["robustbench", "huggingface"]
 AVAILABLE_MODEL = ["resnet26", "wide_resnet28_10"]
@@ -13,10 +14,11 @@ AVAILABLE_OPTIM = ["adam"]
 
 
 logger = logging.getLogger(__name__)
+DEFAULT_CONFIG = load_default_config("cifar10")
 
 
 class BaseMethod(ABC):
-    def __init__(self, config) -> None:
+    def __init__(self, config=DEFAULT_CONFIG) -> None:
         if torch.cuda.is_available():
             DEVICE = "cuda"
         elif torch.backends.mps.is_available():
