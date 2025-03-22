@@ -15,8 +15,8 @@ class Source(BaseMethod):
         names = []
         return params, names
 
-    def set_loss(self):
-        return super().set_loss()
+    def set_loss_fn(self):
+        return super().set_loss_fn()
 
     def forward_and_adapt(self, x):
         return super().forward_and_adapt(x)

@@ -49,7 +49,7 @@ class BaseMethod(ABC):
         self.optim_wd = optim_wd
         self.optimizer = self.set_optimizer()
         # loss
-        self.loss = self.set_loss()
+        self.loss = self.set_loss_fn()
 
     @abstractmethod
     def collect_params(self) -> List[nn.Parameter]:
@@ -64,7 +64,7 @@ class BaseMethod(ABC):
         return params, names
 
     @abstractmethod
-    def set_loss(self) -> None:
+    def set_loss_fn(self) -> None:
         """Define the loss function for the method."""
         return torch.nn.CrossEntropyLoss()
 

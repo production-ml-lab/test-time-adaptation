@@ -64,7 +64,7 @@ class Tent(BaseMethod):
                         names.append(f"{nm}.{np}")
         return params, names
 
-    def set_loss(self):
+    def set_loss_fn(self):
         return self._entropy_loss
 
     def forward_and_adapt(self, x):

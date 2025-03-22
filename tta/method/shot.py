@@ -54,7 +54,7 @@ class SHOT(BaseMethod):
         return params, names
 
     # set loss
-    def set_loss(self):
+    def set_loss_fn(self):
         return loss_shot
 
     def forward_and_adapt(self, x):

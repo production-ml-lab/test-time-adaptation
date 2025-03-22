@@ -51,7 +51,7 @@ class MEMO(BaseMethod):
                     names.append(f"{nm}.{np}")
         return params, names
 
-    def set_loss(self):
+    def set_loss_fn(self):
         """Marginal entropy loss를 정의합니다."""
 
         def marginal_entropy(outputs):
