@@ -4,25 +4,12 @@
 # AVAILABLE_OPTIM = ["adam"]
 
 MODEL:
-  ADAPTATION: Source
   NAME: wide_resnet28_10
   BACKEND: robustbench
-SHIFT:
-  SEVERITY:
-    - 5
-  TYPE:
-    - gaussian_noise
-    - shot_noise
-    - impulse_noise
-    - defocus_blur
-    - glass_blur
-    - motion_blur
-    - zoom_blur
-    - snow
-    - frost
-    - fog
-    - brightness
-    - contrast
-    - elastic_transform
-    - pixelate
-    - jpeg_compression
+
+METHOD:
+  NAME: Source
+
+DATA:
+  NUM_SAMPLES: 100
+  BATCH_SIZE: 100

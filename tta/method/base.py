@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 
 from tta.model import load_resnet26, load_wide_resnet28_10
-from tta.config.utils import load_default_config
+
 
 AVAILABLE_BACKEND = ["robustbench", "huggingface"]
 AVAILABLE_MODEL = ["resnet26", "wide_resnet28_10"]
@@ -14,22 +14,48 @@ AVAILABLE_OPTIM = ["adam"]
 
 
 logger = logging.getLogger(__name__)
-DEFAULT_CONFIG = load_default_config("cifar10")
+if torch.cuda.is_available():
+    DEVICE = "cuda"
+elif torch.backends.mps.is_available():
+    DEVICE = "mps"
+else:
+    DEVICE = "cpu"
 
 
 class BaseMethod(ABC):
-    def __init__(self, config=DEFAULT_CONFIG) -> None:
-        if torch.cuda.is_available():
-            DEVICE = "cuda"
-        elif torch.backends.mps.is_available():
-            DEVICE = "mps"
-        else:
-            DEVICE = "cpu"
-        self.device = DEVICE
-        self.config = config
+    def __init__(
+        self,
+        model_name: str,
+        model_backend: str,
+        model_pretrain: str,
+        optim_method: str,
+        optim_lr: float,
+        optim_beta: float,
+        optim_wd: float,
+        # model_name: str = "wide_resnet28_10",
+        # model_backend: str = "robustbench",
+        # model_pretrain: str = "cifar10",
+        # optim_method: str = "adam",
+        # optim_lr: float = 1e-4,
+        # optim_beta: float = 0.9,
+        # optim_wd: float = 0.0,
+        device: str = DEVICE,
+        **kwargs,
+    ) -> None:
+        self.device = device
+        # model
+        self.model_backend = model_backend
+        self.model_pretrain = model_pretrain
+        self.model_name = model_name
         self.model = self.get_model()
+        # optimizer
         self.params, param_names = self.collect_params()
+        self.optim_method = optim_method
+        self.optim_lr = optim_lr
+        self.optim_beta = optim_beta
+        self.optim_wd = optim_wd
         self.optimizer = self.set_optimizer()
+        # loss
         self.loss = self.set_loss()
 
     @abstractmethod
@@ -60,22 +86,18 @@ class BaseMethod(ABC):
         pass
 
     def get_model(self) -> None:
-        model_backend = self.config.MODEL.BACKEND
-        model_pretrain = self.config.MODEL.PRETRAIN
-        model_name = self.config.MODEL.NAME
+        assert self.model_backend in AVAILABLE_BACKEND
+        assert self.model_name in AVAILABLE_MODEL
 
-        assert model_backend in AVAILABLE_BACKEND
-        assert model_name in AVAILABLE_MODEL
-
-        if model_name == "resnet26":
+        if self.model_name == "resnet26":
             model = load_resnet26(
-                pretrain=model_pretrain,
+                pretrain=self.model_pretrain,
                 device=self.device,
             )
-        elif model_name == "wide_resnet28_10":
+        elif self.model_name == "wide_resnet28_10":
             model = load_wide_resnet28_10(
-                backend=model_backend,
-                pretrain=model_pretrain,
+                backend=self.model_backend,
+                pretrain=self.model_pretrain,
                 device=self.device,
             )
         return model.to(self.device)
@@ -85,15 +107,15 @@ class BaseMethod(ABC):
         if len(self.params) == 0:
             return None
 
-        optim_method = self.config.OPTIM.METHOD
+        optim_method = self.optim_method
         assert optim_method in AVAILABLE_OPTIM
 
         if optim_method == "adam":
             return torch.optim.Adam(
                 self.params,
-                lr=self.config.OPTIM.LR,
-                betas=(self.config.OPTIM.BETA, 0.999),
-                weight_decay=self.config.OPTIM.WD,
+                lr=self.optim_lr,
+                betas=(self.optim_beta, 0.999),
+                weight_decay=self.optim_wd,
             )
         else:
             raise NotImplementedError

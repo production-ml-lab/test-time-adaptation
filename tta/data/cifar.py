@@ -10,11 +10,11 @@ from tta.misc.registry import DATASET_REGISTRY
 from tta.config import cifar10c
 from tta.utils.path import DATA_DIR
 
-CORRUPTION_DOMAINS = cifar10c.SHIFT.TYPE
+CORRUPTION_DOMAINS = cifar10c.DATA.SHIFT_TYPE
 
 
 @DATASET_REGISTRY.register()
-class CifarDataset(Dataset):
+class Cifar10CDataset(Dataset):
     def __init__(
         self,
         data_dir: str = str(DATA_DIR / "cifar10-c"),

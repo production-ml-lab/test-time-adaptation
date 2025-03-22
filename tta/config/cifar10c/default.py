@@ -3,28 +3,46 @@ from yacs.config import CfgNode as CN
 # Default config
 _C = CN()
 
-# ---------- misc ---------- #
-_C.MISC = CN()
-
-# ---------- model ---------- #
+# ---------- Model ---------- #
 _C.MODEL = CN()
 _C.MODEL.NAME = "wide_resnet28_10"
 _C.MODEL.BACKEND = "robustbench"
-_C.MODEL.NUM_CLASSES = 10
-_C.MODEL.ADAPTATION = "Source"
 _C.MODEL.PRETRAIN = "cifar10"
 
-# ---------- Benchmark ---------- #
+# ---------- Method ---------- #
+_C.METHOD = CN()
+_C.METHOD.NAME = "Source"
+
+"""
+<----- CfgNode for specific TTA methods.
+"""
+# ---------- TENT ---------- #
+
+_C.METHOD.OPTIM_METHOD = "adam"
+_C.METHOD.OPTIM_LR = 1e-4
+_C.METHOD.OPTIM_BETA = 0.9  # Adam beta
+_C.METHOD.OPTIM_MOMENTUM = 0.9  # Adam momentum
+_C.METHOD.OPTIM_WD = 0.0  # L2 regularization (weight decay)
+
+# ---------- MEMO ---------- #
+# _C.METHOD.GROUP_NORM = 8
+_C.METHOD.NORM_MEAN = [0.5, 0.5, 0.5]
+_C.METHOD.NORM_STD = [0.5, 0.5, 0.5]
+_C.METHOD.OPTIM_STEPS = 1
+
+# ---------- LAME ---------- #
+
+# ---------- SHOT ---------- #
+
+
+# ---------- Dataset ---------- #
 _C.DATA = CN()
 
-_C.DATA.NAME = "CifarDataset"  # Benchmark name
+_C.DATA.DATASET_NAME = "Cifar10CDataset"  # Benchmark name
+_C.DATA.NUM_SAMPLES = 10000
 _C.DATA.BATCH_SIZE = 200
 _C.DATA.NUM_WORKERS = 4
-
-# ---------- Data shift ---------- #
-_C.SHIFT = CN()
-
-_C.SHIFT.TYPE = [
+_C.DATA.SHIFT_TYPE = [
     "gaussian_noise",
     "shot_noise",
     "impulse_noise",
@@ -41,38 +59,7 @@ _C.SHIFT.TYPE = [
     "pixelate",
     "jpeg_compression",
 ]
-_C.SHIFT.SEVERITY = [5]
+_C.DATA.SHIFT_SEVERITY = [5]
 
-# ---------- optimizer ---------- #
-_C.OPTIM = CN()
-
-_C.OPTIM.METHOD = "adam"
-_C.OPTIM.LR = 1e-4
-_C.OPTIM.BETA = 0.9  # Adam beta
-_C.OPTIM.MOMENTUM = 0.9  # Adam momentum
-_C.OPTIM.WD = 0.0  # L2 regularization (weight decay)
-
-
-"""
-<----- CfgNode for specific TTA methods.
-"""
-
-# ---------- Tent ---------- #
-
-# ---------- MEMO ---------- #
-# _C.MODEL.GROUP_NORM = 8
-_C.DATA.NORM = CN()
-_C.DATA.NORM.MEAN = [0.5, 0.5, 0.5]
-_C.DATA.NORM.STD = [0.5, 0.5, 0.5]
-_C.OPTIM.STEPS = 1
-
-# ---------- LAME ---------- #
-
-# ---------- SHOT ---------- #
-
-
-"""
------> CfgNode for specific TTA methods.
-"""
 
 cfg = _C.clone()

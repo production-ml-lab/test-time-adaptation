@@ -6,6 +6,9 @@ from tta.misc.registry import ADAPTATION_REGISTRY
 
 @ADAPTATION_REGISTRY.register()
 class Source(BaseMethod):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def collect_params(self):
         # No params to update
         params = []

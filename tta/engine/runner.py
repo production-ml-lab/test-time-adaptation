@@ -1,5 +1,5 @@
 import math
-from yacs.config import CfgNode
+from typing import List
 
 from tta.method import BaseMethod
 from tta.misc.registry import DATASET_REGISTRY
@@ -11,12 +11,23 @@ dataset_registry = DATASET_REGISTRY
 
 
 class Runner:
-    def __init__(self, config: CfgNode, method: BaseMethod):
-        self.config = config
+    def __init__(
+        self,
+        method: BaseMethod,
+        dataset_name: str,
+        num_samples: int,
+        batch_size: int,
+        shift_type: List[str],
+        shift_severity: List[int],
+        **kwargs,
+    ):
         self.method = method
+        self.dataset_name = dataset_name
+        self.num_samples = num_samples
+        self.batch_size = batch_size
 
-        self.shift_type = config.SHIFT.TYPE
-        self.shift_severity = config.SHIFT.SEVERITY
+        self.shift_type = shift_type
+        self.shift_severity = shift_severity
 
         self.results = {}
 
@@ -25,14 +36,16 @@ class Runner:
         cnt = 0
         for shift_name in self.shift_type:
             for severity_level in self.shift_severity:
-                dataset_name = self.config.DATA.NAME
-                batch_size = self.config.DATA.BATCH_SIZE
 
-                dataset = dataset_registry.get(dataset_name)(
+                dataset = dataset_registry.get(self.dataset_name)(
                     corrupt_domain_orders=[shift_name],
                     severity=severity_level,
+                    num_samples=self.num_samples,
                 )
-                test_loader = build_test_loader(dataset, batch_size=batch_size)
+                test_loader = build_test_loader(
+                    dataset,
+                    batch_size=self.batch_size,
+                )
 
                 preds = []
                 gts = []
