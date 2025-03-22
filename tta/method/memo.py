@@ -5,7 +5,7 @@ from PIL import Image
 
 from tta.method import BaseMethod
 from tta.misc.registry import ADAPTATION_REGISTRY
-from tta.utils.data.memo import memo_aug
+from tta.data.memo import memo_aug
 
 
 @ADAPTATION_REGISTRY.register()

@@ -3,8 +3,8 @@ from yacs.config import CfgNode
 
 from tta.method import BaseMethod
 from tta.misc.registry import DATASET_REGISTRY
-from tta.utils.data import build_test_loader
-from tta.metrics import get_accuracy
+from tta.data import build_test_loader
+from tta.utils.metrics import get_accuracy
 
 
 dataset_registry = DATASET_REGISTRY

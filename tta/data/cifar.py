@@ -7,8 +7,8 @@ from torch.utils.data import Dataset
 from robustbench.data import load_cifar10c
 
 from tta.misc.registry import DATASET_REGISTRY
-from tta.utils.config import cifar10c
-from tta.path import DATA_DIR
+from tta.config import cifar10c
+from tta.utils.path import DATA_DIR
 
 CORRUPTION_DOMAINS = cifar10c.SHIFT.TYPE
 

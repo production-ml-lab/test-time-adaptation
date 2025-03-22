@@ -6,4 +6,4 @@ from .memo import MEMO
 from .shot import SHOT
 
 
-__all__ = ["BaseMethod", "Source", "Tent", "Lame", "MEMO","SHOT"]
+__all__ = ["BaseMethod", "Source", "Tent", "Lame", "MEMO", "SHOT"]

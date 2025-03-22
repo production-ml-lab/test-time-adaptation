@@ -5,7 +5,7 @@ import torch
 from huggingface_hub import hf_hub_download
 from robustbench import load_model as robustbench_load_model
 
-from tta.path import WEIGHT_DIR
+from tta.utils.path import WEIGHT_DIR
 
 
 with open(Path(__file__).parent / "huggingface.yaml", "r") as file:
