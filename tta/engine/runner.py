@@ -16,22 +16,23 @@ class Runner:
         self.method = method
 
         self.shift_type = config.SHIFT.TYPE
-        self.shift_serverity = config.SHIFT.SEVERITY
+        self.shift_severity = config.SHIFT.SEVERITY
 
         self.results = {}
 
     def run(self):
-        num_exp = len(self.shift_type) * len(self.shift_serverity)
+        num_exp = len(self.shift_type) * len(self.shift_severity)
         cnt = 0
         for shift_name in self.shift_type:
-            for severity_level in self.shift_serverity:
-                dataset = dataset_registry.get(self.config.DATA.NAME)(
+            for severity_level in self.shift_severity:
+                dataset_name = self.config.DATA.NAME
+                batch_size = self.config.DATA.BATCH_SIZE
+
+                dataset = dataset_registry.get(dataset_name)(
                     corrupt_domain_orders=[shift_name],
                     severity=severity_level,
                 )
-                test_loader = build_test_loader(
-                    dataset, batch_size=self.config.DATA.BATCH_SIZE
-                )
+                test_loader = build_test_loader(dataset, batch_size=batch_size)
 
                 preds = []
                 gts = []
