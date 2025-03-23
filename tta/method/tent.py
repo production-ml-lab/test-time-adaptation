@@ -67,6 +67,7 @@ class Tent(BaseMethod):
     def set_loss_fn(self):
         return self._entropy_loss
 
+    @torch.enable_grad()
     def forward_and_adapt(self, x):
         self.model.train()
         x = x.to(self.device)
