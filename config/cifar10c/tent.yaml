@@ -1,8 +1,27 @@
 MODEL:
-  ADAPTATION: "Tent"
-  NAME: "wide_resnet28_10"
-  BACKEND: "huggingface"
-  PRETRAIN: "cifar10"
+  ADAPTATION: Tent
+  NAME: wide_resnet28_10
+  BACKEND: robustbench
+  
+SHIFT:
+  SEVERITY:
+    - 5
+  TYPE:
+    - gaussian_noise
+    - shot_noise
+    - impulse_noise
+    - defocus_blur
+    - glass_blur
+    - motion_blur
+    - zoom_blur
+    - snow
+    - frost
+    - fog
+    - brightness
+    - contrast
+    - elastic_transform
+    - pixelate
+    - jpeg_compression
 
 DATA:
   BATCH_SIZE: 200

@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from copy import deepcopy
 
 from tta.method import BaseMethod
 from tta.misc.registry import ADAPTATION_REGISTRY
@@ -10,15 +11,24 @@ def softmax_entropy(x: torch.Tensor) -> torch.Tensor:
     """Tent 논문의 엔트로피 함수 정의"""
     return -(x.softmax(1) * x.log_softmax(1)).sum(1)
 
-
 @ADAPTATION_REGISTRY.register()
 class Tent(BaseMethod):
     def __init__(self, config):
         super().__init__(config)
-        self.model.train()
         self._configure_model()
         self.params, _ = self.collect_params()
         self.optimizer = self.set_optimizer()
+        self.model_state = deepcopy(self.model.state_dict())
+        self.optimizer_state = deepcopy(self.optimizer.state_dict())
+        self.episodic = True
+
+    def forward(self, x):
+        if self.model.training:
+            outputs = self.forward_and_adapt(x)
+        else:
+            outputs = self.model(x)
+        return outputs.argmax(1)
+
 
     def _configure_model(self):
         """
@@ -56,23 +66,33 @@ class Tent(BaseMethod):
                         names.append(f"{nm}.{np}")
         return params, names
 
+
     def set_loss(self):
         return self._entropy_loss
+
 
     @torch.enable_grad()
     def forward_and_adapt(self, x):
         x = x.to(self.device)
-        for _ in range(self.config.OPTIM.STEPS):
-            outputs = self.model(x)
-            loss = self.loss(outputs)
-            loss.backward()
-            self.optimizer.step()
-            self.optimizer.zero_grad()
+        outputs = self.model(x)
+        loss = self.loss(outputs)
+        loss.backward()
+        self.optimizer.step()
+        self.optimizer.zero_grad()
+        return outputs
+
 
     def _entropy_loss(self, logits):
         return softmax_entropy(logits).mean()
 
+
+    def reset(self):
+        """Corruption 변경 시 초기 상태 복원"""
+        self.model.load_state_dict(self.model_state)
+        self.optimizer.load_state_dict(self.optimizer_state)
+        self.model.to(self.device)
+
+
     @torch.no_grad()
     def predict(self, x):
-        x = x.to(self.device)
-        return self.model(x).argmax(1)
+        return self.forward_and_adapt(x).argmax(1)
