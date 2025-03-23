@@ -1,6 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 from typing import List
+from copy import deepcopy
 
 import torch
 import torch.nn as nn
@@ -50,6 +51,10 @@ class BaseMethod(ABC):
         self.optimizer = self.set_optimizer()
         # loss
         self.loss = self.set_loss_fn()
+
+        self.model_state, self.optimizer_state = self.copy_model_and_optimizer(
+            self.model, self.optimizer
+        )
 
     @abstractmethod
     def collect_params(self) -> List[nn.Parameter]:
@@ -124,7 +129,23 @@ class BaseMethod(ABC):
         return trainable, total
 
     def reset(self) -> None:
-        """Reset the model and optimizer state to the initial source state."""
-        self.model = self.get_model()
-        self.params, param_names = self.collect_params()
-        self.optimizer = self.set_optimizer()
+        if self.model_state is None:
+            raise Exception("cannot reset without saved model state")
+        self.load_model_and_optimizer(
+            self.model, self.optimizer, self.model_state, self.optimizer_state
+        )
+
+    def copy_model_and_optimizer(self, model, optimizer):
+        model_state = deepcopy(model.state_dict())
+
+        if optimizer is not None:
+            optimizer_state = deepcopy(optimizer.state_dict())
+        else:
+            optimizer_state = None
+
+        return model_state, optimizer_state
+
+    def load_model_and_optimizer(self, model, optimizer, model_state, optimizer_state):
+        model.load_state_dict(model_state, strict=True)
+        if optimizer is not None:
+            optimizer.load_state_dict(optimizer_state)
