@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 
 from tta.method import BaseMethod
@@ -61,11 +62,35 @@ def entropy_energy(Y, unary, pairwise, bound_lambda):
     return E
 
 
+class LameModel(nn.Module):
+    def __init__(self, model):
+        super().__init__()
+        self.model = model
+
+    def forward_feature(self, x):
+        out = self.model.conv1(x)
+        out = self.model.block1(out)
+        out = self.model.block2(out)
+        out = self.model.block3(out)
+        out = self.model.relu(self.model.bn1(out))
+        out = F.avg_pool2d(out, 8)
+        out = out.view(-1, self.model.nChannels)
+        return out
+
+    def forward(self, x):
+        x = self.forward_feature(x)
+        return self.model.fc(x)
+
+
 @ADAPTATION_REGISTRY.register()
 class Lame(BaseMethod):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.affinity = kNN_affinity()
+        self.set_lame_model()
+
+    def set_lame_model(self):
+        self.lame_model = LameModel(self.model)
 
     def collect_params(self):
         return super().collect_params()
@@ -79,8 +104,8 @@ class Lame(BaseMethod):
     @torch.no_grad()
     def predict(self, x):
         x = x.to(self.device)
-        feats = self.model.forward_feature(x)
-        logits = self.model.forward(x)
+        feats = self.lame_model.forward_feature(x)
+        logits = self.lame_model.forward(x)
         probas = F.softmax(logits, dim=1)
         feats = F.normalize(feats, p=2, dim=-1)  # [N, d]
         unary = -torch.log(probas + 1e-10)  # [N, K]
