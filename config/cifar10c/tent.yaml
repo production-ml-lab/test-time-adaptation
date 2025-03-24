@@ -1,33 +1,13 @@
+METHOD:
+  NAME: Tent
+  OPTIM_METHOD: adam
+  OPTIM_LR: 1e-3
+  OPTIM_STEPS: 1
+
 MODEL:
-  ADAPTATION: Tent
   NAME: wide_resnet28_10
   BACKEND: robustbench
-  
-SHIFT:
-  SEVERITY:
-    - 5
-  TYPE:
-    - gaussian_noise
-    - shot_noise
-    - impulse_noise
-    - defocus_blur
-    - glass_blur
-    - motion_blur
-    - zoom_blur
-    - snow
-    - frost
-    - fog
-    - brightness
-    - contrast
-    - elastic_transform
-    - pixelate
-    - jpeg_compression
 
 DATA:
-  BATCH_SIZE: 200
-  NUM_WORKERS: 4
-
-OPTIM:
-  METHOD: "adam"
-  LR: 1e-3
-  STEPS: 1
+  NUM_SAMPLES: 100
+  BATCH_SIZE: 100

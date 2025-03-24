@@ -5,7 +5,7 @@ import yaml
 
 from datetime import datetime
 from tabulate import tabulate
-from tta.utils.config import cifar10c
+from tta.config import cifar10c
 
 
 # CLI 인자 파싱 함수

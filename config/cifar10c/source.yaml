@@ -2,27 +2,14 @@
 # AVAILABLE_ROBUST_MODEL = ["Standard"]
 # AVAILABLE_CUSTOM_MODEL = ["resnet26", "wide_resnet28_10"]
 # AVAILABLE_OPTIM = ["adam"]
+METHOD:
+  NAME: Source
 
 MODEL:
-  ADAPTATION: Source
   NAME: wide_resnet28_10
   BACKEND: robustbench
-SHIFT:
-  SEVERITY:
-    - 5
-  TYPE:
-    - gaussian_noise
-    - shot_noise
-    - impulse_noise
-    - defocus_blur
-    - glass_blur
-    - motion_blur
-    - zoom_blur
-    - snow
-    - frost
-    - fog
-    - brightness
-    - contrast
-    - elastic_transform
-    - pixelate
-    - jpeg_compression
+
+
+DATA:
+  NUM_SAMPLES: 100
+  BATCH_SIZE: 100

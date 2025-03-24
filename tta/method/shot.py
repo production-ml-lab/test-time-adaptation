@@ -33,10 +33,9 @@ def loss_shot(outputs):
 
 @ADAPTATION_REGISTRY.register()
 class SHOT(BaseMethod):
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-    ##############################################################
     # collect params
     def collect_params(self):
         """Collect the affine scale + shift parameters from batch norms./
@@ -54,16 +53,8 @@ class SHOT(BaseMethod):
                         names.append(f"{nm}.{np}")
         return params, names
 
-    ##############################################################
-    # set optimizer
-    def set_optimizer(self):
-        # 중원님의 memo optimizer 그대로 사용
-        """MEMO는 SGD optimizer를 사용합니다."""
-        return optim.SGD(self.params, lr=self.config.OPTIM.LR)
-
-    ##############################################################
     # set loss
-    def set_loss(self):
+    def set_loss_fn(self):
         return loss_shot
 
     def forward_and_adapt(self, x):

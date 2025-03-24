@@ -1,42 +1,16 @@
+METHOD:
+  NAME: MEMO
+  OPTIM_METHOD: sgd
+  OPTIM_LR: 0.005
+  OPTIM_STEPS: 1
+  NORM_MEAN: [0.5, 0.5, 0.5]
+  NORM_STD: [0.5, 0.5, 0.5]
+  AUG_BATCH_SIZE : 4
+
 MODEL:
-  NAME: resnet26
-  BACKEND: huggingface
-  ADAPTATION: MEMO
-  NUM_CLASSES: 10
-  # GROUP_NORM: 8
-OPTIM:
-  METHOD: sgd
-  LR: 0.005
-  STEPS: 1
+  NAME: wide_resnet28_10
+  BACKEND: robustbench
 
 DATA:
-  BATCH_SIZE: 32
-  NUM_WORKERS: 8
-  NORM:
-    MEAN: [0.5, 0.5, 0.5]
-    STD: [0.5, 0.5, 0.5]
-  # for local
-  # ROOT: 'dataset/CIFAR-10-C'
-SHIFT:
-  SEVERITY:
-    - 5
-    - 4
-    - 3
-    - 2
-    - 1
-  TYPE:
-    - gaussian_noise
-    - shot_noise
-    - impulse_noise
-    - defocus_blur
-    - glass_blur
-    - motion_blur
-    - zoom_blur
-    - snow
-    - frost
-    - fog
-    - brightness
-    - contrast
-    - elastic_transform
-    - pixelate
-    - jpeg_compression
+  BATCH_SIZE: 4
+  NUM_SAMPLES: 10

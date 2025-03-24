@@ -6,14 +6,17 @@ from tta.misc.registry import ADAPTATION_REGISTRY
 
 @ADAPTATION_REGISTRY.register()
 class Source(BaseMethod):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def collect_params(self):
         # No params to update
         params = []
         names = []
         return params, names
 
-    def set_loss(self):
-        return super().set_loss()
+    def set_loss_fn(self):
+        return super().set_loss_fn()
 
     def forward_and_adapt(self, x):
         return super().forward_and_adapt(x)
