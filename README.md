@@ -136,7 +136,17 @@ make pre-commit
     orgs:  mlp-tta
     ```
 3. Upload model to hub.
-
     ```bash
     huggingface-cli upload mlp-tta/resnet-26 models/resnet-26 .
+    ```
+
+## Run streamlit demo app
+
+1. Install dev extras
+    ```bash
+    uv sync --all-extras
+    ```
+2. Run streamlit run app
+    ```bash
+    uv run streamlit run app/app.py
     ```
