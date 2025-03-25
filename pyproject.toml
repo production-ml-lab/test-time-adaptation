@@ -23,6 +23,8 @@ robustbench = { git = "https://github.com/RobustBench/robustbench.git" }
 dev = [
     "ipython",
     "ipykernel",
+    "streamlit",
+    "matplotlib",
 ]
 
 [build-system]
