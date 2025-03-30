@@ -37,7 +37,18 @@ shift_severity = st.sidebar.slider(
     max_value=5,
     value=5,
 )
-
+optim_steps = st.sidebar.number_input(
+    "Optimization Steps",
+    min_value=1,
+    value=10,
+    step=1,
+)
+batch_size = st.sidebar.number_input(
+    "Batch Size",
+    min_value=1,
+    value=4,
+    step=1,
+)
 ############ Adaptation section ############
 adapt_registry = ADAPTATION_REGISTRY
 
@@ -46,6 +57,7 @@ method_kwargs = cfg_node_to_dict(config.METHOD)
 model_name = config.MODEL.NAME
 model_backend = config.MODEL.BACKEND
 model_pretrain = config.MODEL.PRETRAIN
+method_kwargs["optim_steps"] = optim_steps
 
 
 @st.cache_resource()
@@ -82,17 +94,19 @@ from tta.data.dataloader import build_test_loader
 
 
 @st.cache_data()
-def load_dataloader(shift_type, shift_severity):
+def load_dataloader(shift_type, shift_severity, batch_size):
     dataset = Cifar10CDataset(
         num_samples=100,
         corrupt_domain_orders=[shift_type],
         severity=shift_severity,
     )
-    data_loader = build_test_loader(dataset, batch_size=4)
+    data_loader = build_test_loader(dataset, batch_size=batch_size)
     return data_loader
 
 
-dataloader = load_dataloader(shift_type=shift_type, shift_severity=shift_severity)
+dataloader = load_dataloader(
+    shift_type=shift_type, shift_severity=shift_severity, batch_size=batch_size
+)
 
 
 def compute_entropy(probs):

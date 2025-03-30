@@ -17,7 +17,7 @@ class Tent(BaseMethod):
     def __init__(self, optim_steps: int, **kwargs):
         super().__init__(**kwargs)
         self.optim_steps = optim_steps
-        self._configure_model()
+        # self._configure_model()
         self.params, _ = self.collect_params()
         self.optimizer = self.set_optimizer()
         self.model_state = deepcopy(self.model.state_dict())
